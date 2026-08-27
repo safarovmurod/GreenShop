@@ -1,6 +1,12 @@
-import { LoginOutlined, MenuOutlined, Search, ShoppingCartOutlined } from "@mui/icons-material";
-import { Box, IconButton, Stack, Button } from "@mui/material";
-import { NavLink } from "react-router";
+import {
+  LoginOutlined,
+  MenuOutlined,
+  PersonOutlineOutlined,
+  Search,
+  ShoppingCartOutlined,
+} from "@mui/icons-material";
+import { Box, IconButton, Stack, Button, Badge } from "@mui/material";
+import { NavLink, useNavigate } from "react-router";
 import logo from "../assets/Logo (1).png";
 
 const links = [
@@ -10,7 +16,9 @@ const links = [
   { label: "Blogs", path: "/blogs" },
 ];
 
-export default function Header() {
+export default function Header({ user, cartCount = 0, onLoginClick }) {
+  const navigate = useNavigate();
+
   return (
     <Box
       component="header"
@@ -85,7 +93,7 @@ export default function Header() {
           ))}
         </Stack>
 
-        <Stack direction="row" alignItems="center" gap={{ xs: 0.25, sm: 1 }}>
+        <Stack direction="row" sx={{ alignItems: "center" }} gap={{ xs: 0.25, sm: 1 }}>
           <IconButton
             aria-label="Search"
             sx={{ color: "#3d3d3d", p: 0.8, "&:hover": { color: "#46a358" } }}
@@ -94,9 +102,23 @@ export default function Header() {
           </IconButton>
           <IconButton
             aria-label="Shopping cart"
+            onClick={() => navigate("/cart")}
             sx={{ color: "#3d3d3d", p: 0.8, "&:hover": { color: "#46a358" } }}
           >
-            <ShoppingCartOutlined sx={{ fontSize: 21 }} />
+            <Badge
+              badgeContent={cartCount}
+              sx={{
+                "& .MuiBadge-badge": {
+                  minWidth: 16,
+                  height: 16,
+                  backgroundColor: "#46a358",
+                  color: "#fff",
+                  fontSize: 10,
+                },
+              }}
+            >
+              <ShoppingCartOutlined sx={{ fontSize: 21 }} />
+            </Badge>
           </IconButton>
           <IconButton
             aria-label="Filters"
@@ -104,25 +126,46 @@ export default function Header() {
           >
             <MenuOutlined sx={{ fontSize: 21 }} />
           </IconButton>
-          <Button
-            component={NavLink}
-            to="/login"
-            startIcon={<LoginOutlined sx={{ fontSize: 17 }} />}
-            sx={{
-              minWidth: 61,
-              height: 35,
-              ml: { xs: 0.5, sm: 1 },
-              px: 1.5,
-              borderRadius: 1.5,
-              color: "#fff",
-              backgroundColor: "#46a358",
-              fontSize: 13,
-              textTransform: "none",
-              "&:hover": { backgroundColor: "#398c49" },
-            }}
-          >
-            Login
-          </Button>
+          {user ? (
+            <Button
+              component={NavLink}
+              to="/my-account"
+              startIcon={<PersonOutlineOutlined sx={{ fontSize: 17 }} />}
+              sx={{
+                minWidth: 61,
+                height: 35,
+                ml: { xs: 0.5, sm: 1 },
+                px: 1.5,
+                borderRadius: 1.5,
+                color: "#fff",
+                backgroundColor: "#46a358",
+                fontSize: 13,
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#398c49" },
+              }}
+            >
+              My Account
+            </Button>
+          ) : (
+            <Button
+              onClick={onLoginClick}
+              startIcon={<LoginOutlined sx={{ fontSize: 17 }} />}
+              sx={{
+                minWidth: 61,
+                height: 35,
+                ml: { xs: 0.5, sm: 1 },
+                px: 1.5,
+                borderRadius: 1.5,
+                color: "#fff",
+                backgroundColor: "#46a358",
+                fontSize: 13,
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#398c49" },
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Stack>
       </Box>
     </Box>

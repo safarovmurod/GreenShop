@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useNavigate } from "react-router";
 
 // Суратҳоро метавонед ба суратҳои дилхоҳи худ иваз кунед
 import blogImg1 from "../../assets/01 1.png";
@@ -8,7 +9,7 @@ import blogImg2 from "../../assets/02.png";
 import blogImg3 from "../../assets/03.png";
 import blogImg4 from "../../assets/04.png";
 
-const blogPosts = [
+export const blogPosts = [
   {
     id: 1,
     image: blogImg1,
@@ -44,6 +45,8 @@ const blogPosts = [
 ];
 
 const BlogSection = () => {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ maxWidth: "1200px", mx: "auto", my: 10, px: { xs: "20px", md: "0" } }}>
       
@@ -68,7 +71,9 @@ const BlogSection = () => {
         {blogPosts.map((post) => (
           <Box 
             key={post.id} 
+            onClick={() => navigate(`/blogs/${post.id}`)}
             sx={{ 
+              cursor: "pointer",
               backgroundColor: "#FBFBFB", 
               display: "flex", 
               flexDirection: "column", 
@@ -100,6 +105,7 @@ const BlogSection = () => {
               </Typography>
 
               <Box 
+                onClick={() => navigate(`/blogs/${post.id}`)}
                 sx={{ 
                   display: "flex", 
                   alignItems: "center", 

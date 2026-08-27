@@ -1,36 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Typography, Button, TextField, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-// import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { plants } from "../../data/api";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { useNavigate, useOutletContext } from "react-router";
 
 const ShoppingCart = () => {
-  // Барои мисол чанд маҳсулотро дар сават мемонем
-  const [cartItems, setCartItems] = useState([
-    { ...plants[0], quantity: 2 },
-    { ...plants[4], quantity: 6 },
-    { ...plants[5], quantity: 9 },
-  ]);
+  const navigate = useNavigate();
+  // Маҳсулоти сават аз Layout меояд (як массиви ягона)
+  const { cart, increaseQty, decreaseQty, removeFromCart } = useOutletContext();
 
-  // Функсияи зиёд кардани миқдор
-  const handleIncrease = (id) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    ));
-  };
-
-  // Функсияи кам кардани миқдор
-  const handleDecrease = (id) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-    ));
-  };
-
-  // Функсияи тоза кардани маҳсулот
-  const handleDelete = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  const cartItems = cart;
 
   // Ҳисоби маблағи умумӣ (Subtotal)
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -42,7 +22,13 @@ const ShoppingCart = () => {
       
       {/* Навигарияи боло (Breadcrumbs) */}
       <Typography sx={{ display: { xs: "none", md: "block" }, fontSize: "14px", color: "#727272", mb: 5 }}>
-        <span style={{ fontWeight: "bold", color: "#3D3D3D" }}>Home</span> / Shop / Shopping Cart
+        <span
+          onClick={() => navigate("/")}
+          style={{ fontWeight: "bold", color: "#3D3D3D", cursor: "pointer" }}
+        >
+          Home
+        </span>{" "}
+        / Shop / Shopping Cart
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "40px" }}>
@@ -58,6 +44,13 @@ const ShoppingCart = () => {
             <Typography sx={{ fontWeight: "bold" }}>Total</Typography>
             <Typography></Typography>
           </Box>
+
+          {/* Агар сават холӣ бошад */}
+          {cartItems.length === 0 && (
+            <Typography sx={{ py: 4, fontSize: "15px", color: "#727272" }}>
+              Your cart is empty.
+            </Typography>
+          )}
 
           {/* Рӯйхати маҳсулоти сават */}
           {cartItems.map((item) => (
@@ -101,14 +94,14 @@ const ShoppingCart = () => {
               {/* Миқдор (+ ва -) */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 1.5 } }}>
                 <IconButton 
-                  onClick={() => handleDecrease(item.id)} 
+                  onClick={() => decreaseQty(item.id)} 
                   sx={{ color: "#fff", backgroundColor: "#46A358", width: "24px", height: "24px", "&:hover": { backgroundColor: "#3a8a49" } }}
                 >
                   <RemoveIcon sx={{ fontSize: "14px" }} />
                 </IconButton>
                 <Typography sx={{ fontWeight: "bold", fontSize: "15px" }}>{item.quantity}</Typography>
                 <IconButton 
-                  onClick={() => handleIncrease(item.id)} 
+                  onClick={() => increaseQty(item.id)} 
                   sx={{ color: "#fff", backgroundColor: "#46A358", width: "24px", height: "24px", "&:hover": { backgroundColor: "#3a8a49" } }}
                 >
                   <AddIcon sx={{ fontSize: "14px" }} />
@@ -121,8 +114,8 @@ const ShoppingCart = () => {
               </Typography>
 
               {/* Нест кардан */}
-              <IconButton onClick={() => handleDelete(item.id)} sx={{ color: "#727272", "&:hover": { color: "#d32f2f" } }}>
-                {/* <DeleteOutlineIcon /> */}
+              <IconButton onClick={() => removeFromCart(item.id)} sx={{ color: "#727272", "&:hover": { color: "#d32f2f" } }}>
+                <DeleteOutlinedIcon />
               </IconButton>
             </Box>
           ))}
@@ -176,6 +169,7 @@ const ShoppingCart = () => {
           <Button 
             fullWidth 
             variant="contained" 
+            onClick={() => navigate("/checkout")}
             sx={{ 
               backgroundColor: "#46A358", 
               color: "#fff", 
@@ -190,7 +184,10 @@ const ShoppingCart = () => {
             Proceed To Checkout
           </Button>
 
-          <Typography sx={{ textAlign: "center", color: "#46A358", fontSize: "14px", fontWeight: "bold", cursor: "pointer" }}>
+          <Typography
+            onClick={() => navigate("/")}
+            sx={{ textAlign: "center", color: "#46A358", fontSize: "14px", fontWeight: "bold", cursor: "pointer" }}
+          >
             Continue Shopping
           </Typography>
 

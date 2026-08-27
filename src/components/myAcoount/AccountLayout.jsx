@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Avatar } from "@mui/material";
+import { useNavigate, useOutletContext } from "react-router";
+import { Box, Typography, TextField, Button } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
@@ -8,34 +9,37 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import HeadsetMicOutlinedIcon from "@mui/icons-material/HeadsetMicOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { plants } from "../../data/api";
 
 const AccountLayout = () => {
+  const navigate = useNavigate();
+  const { user, login, logout, wishlist } = useOutletContext();
+
   // Идора кардани кадом саҳифа фаъол аст ("details", "address", "orders", etc.)
-  const [activeTab, setActiveTab] = useState("address");
+  const [activeTab, setActiveTab] = useState("details");
+
+  // Маълумоти корбар (аз Layout меояд)
+  const [name, setName] = useState(user ? user.name : "");
+  const [lastName, setLastName] = useState(user ? user.lastName || "" : "");
+  const [email, setEmail] = useState(user ? user.email : "");
+  const [phone, setPhone] = useState(user ? user.phone || "" : "");
+  const [code, setCode] = useState(user ? user.code || "+966" : "+966");
+
+  // Маҳсулоти дар Wishlist буда
+  const wishlistItems = plants.filter((plant) => wishlist.includes(plant.id));
+
+  const handleSave = () => {
+    login({ name, lastName, email, phone, code });
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <Box sx={{ maxWidth: "1200px", mx: "auto", my: 6, px: { xs: "20px", md: "0" } }}>
       
-      {/* Header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #eaeaea", pb: 3, mb: 5 }}>
-        <Typography sx={{ fontWeight: "bold", fontSize: "22px", color: "#46A358" }}>GREENSHOP</Typography>
-        <Box sx={{ display: "flex", gap: 4 }}>
-          <Typography sx={{ color: "#3D3D3D", cursor: "pointer" }}>Home</Typography>
-          <Typography sx={{ color: "#3D3D3D", cursor: "pointer", fontWeight: "bold" }}>Shop</Typography>
-          <Typography sx={{ color: "#3D3D3D", cursor: "pointer" }}>Plant Care</Typography>
-          <Typography sx={{ color: "#3D3D3D", cursor: "pointer" }}>Blogs</Typography>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          <Typography sx={{ cursor: "pointer" }}>🔍</Typography>
-          <Typography sx={{ cursor: "pointer" }}>🛒</Typography>
-          <Button variant="contained" sx={{ backgroundColor: "#46A358", color: "#fff", textTransform: "none", px: 3, "&:hover": { backgroundColor: "#3a8a49" } }}>
-            Login
-          </Button>
-        </Box>
-      </Box>
-
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px" }}>
         
         {/* Sidebar */}
@@ -102,7 +106,7 @@ const AccountLayout = () => {
               <Typography sx={{ fontSize: "15px", fontWeight: activeTab === "support" ? "bold" : "normal" }}>Support</Typography>
             </Box>
 
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: "#D32F2F", cursor: "pointer", pl: 2, pt: 3, borderTop: "1px solid #eaeaea", mt: 2 }}>
+            <Box onClick={handleLogout} sx={{ display: "flex", alignItems: "center", gap: 2, color: "#D32F2F", cursor: "pointer", pl: 2, pt: 3, borderTop: "1px solid #eaeaea", mt: 2 }}>
               <LogoutOutlinedIcon sx={{ fontSize: "20px" }} />
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>Logout</Typography>
             </Box>
@@ -117,14 +121,19 @@ const AccountLayout = () => {
             <Box>
               <Typography sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 3 }}>Personal Information</Typography>
               <Box sx={{ display: "flex", gap: "30px", mb: 3 }}>
-                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>First Name *</Typography><TextField fullWidth size="small" variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
-                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>Last Name *</Typography><TextField fullWidth size="small" variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
+                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>First Name *</Typography><TextField fullWidth size="small" value={name} onChange={(event) => setName(event.target.value)} variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
+                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>Last Name *</Typography><TextField fullWidth size="small" value={lastName} onChange={(event) => setLastName(event.target.value)} variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
               </Box>
               <Box sx={{ display: "flex", gap: "30px", mb: 3 }}>
-                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>Email address *</Typography><TextField fullWidth size="small" variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
-                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>Phone Number *</Typography><TextField fullWidth size="small" defaultValue="+966" variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
+                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>Email address *</Typography><TextField fullWidth size="small" value={email} onChange={(event) => setEmail(event.target.value)} variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} /></Box>
+                <Box sx={{ flex: 1 }}><Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 1 }}>Phone Number *</Typography>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <TextField size="small" value={code} onChange={(event) => setCode(event.target.value)} variant="outlined" sx={{ width: "90px", backgroundColor: "#FBFBFB" }} />
+                    <TextField fullWidth size="small" value={phone} onChange={(event) => setPhone(event.target.value)} variant="outlined" sx={{ backgroundColor: "#FBFBFB" }} />
+                  </Box>
+                </Box>
               </Box>
-              <Button variant="contained" sx={{ backgroundColor: "#46A358", color: "#fff", px: 4, py: 1.2, fontWeight: "bold", textTransform: "none", borderRadius: "4px", "&:hover": { backgroundColor: "#3a8a49" } }}>Save Change</Button>
+              <Button variant="contained" onClick={handleSave} sx={{ backgroundColor: "#46A358", color: "#fff", px: 4, py: 1.2, fontWeight: "bold", textTransform: "none", borderRadius: "4px", "&:hover": { backgroundColor: "#3a8a49" } }}>Save Change</Button>
             </Box>
           )}
 
@@ -195,8 +204,32 @@ const AccountLayout = () => {
             </Box>
           )}
 
-          {/* 4. OTHER TABS (Wishlist, Reports, Downloads, Support) */}
-          {["wishlist", "reports", "downloads", "support"].includes(activeTab) && (
+          {/* 4. WISHLIST */}
+          {activeTab === "wishlist" && (
+            <Box>
+              <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "#3D3D3D", mb: 3 }}>Wishlist</Typography>
+              {wishlistItems.length === 0 ? (
+                <Typography sx={{ fontSize: "14px", color: "#727272" }}>No products in your wishlist yet.</Typography>
+              ) : (
+                wishlistItems.map((item) => (
+                  <Box
+                    key={item.id}
+                    onClick={() => navigate(`/shop/${item.id}`)}
+                    sx={{ display: "flex", alignItems: "center", gap: 2, backgroundColor: "#FBFBFB", p: 2, borderRadius: "6px", mb: 2, cursor: "pointer" }}
+                  >
+                    <Box component="img" src={item.images[0]} alt={item.name} sx={{ width: "60px", height: "60px", objectFit: "contain" }} />
+                    <Box>
+                      <Typography sx={{ fontWeight: "bold", fontSize: "15px", color: "#3D3D3D" }}>{item.name}</Typography>
+                      <Typography sx={{ fontSize: "15px", fontWeight: "bold", color: "#46A358" }}>${item.price}.00</Typography>
+                    </Box>
+                  </Box>
+                ))
+              )}
+            </Box>
+          )}
+
+          {/* 5. OTHER TABS (Reports, Downloads, Support) */}
+          {["reports", "downloads", "support"].includes(activeTab) && (
             <Box sx={{ textAlign: "center", py: 8, backgroundColor: "#FBFBFB", borderRadius: "8px" }}>
               <Typography sx={{ fontSize: "18px", fontWeight: "bold", color: "#3D3D3D", textTransform: "capitalize", mb: 1 }}>
                 {activeTab} Section

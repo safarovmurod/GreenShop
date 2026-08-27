@@ -10,28 +10,52 @@ import {
   RadioGroup, 
   FormControl 
 } from "@mui/material";
-import { plants } from "../../data/api";
+import { useNavigate, useOutletContext } from "react-router";
+import OrderModal from "./OrderModal";
+
+// Кортҳои пардохт
+const cards = ["MasterCard", "Visa", "American Express"];
 
 const Checkout = () => {
-  // Барои мисол ҳамон маҳсулоти саватро дар ин ҷо ҳам менишинонем
-  const orderItems = [
-    { ...plants[0], quantity: 2 },
-    { ...plants[4], quantity: 6 },
-    { ...plants[5], quantity: 9 },
-  ];
+  const navigate = useNavigate();
+  const { cart, clearCart, showNotice } = useOutletContext();
+
+  const orderItems = cart;
 
   const subtotal = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const shipping = 16.00;
   const total = subtotal + shipping;
 
   const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [card, setCard] = useState("Visa");
+
+  // Маълумоти фармоиш барои dialog (баъди Place Order пур мешавад)
+  const [order, setOrder] = useState(null);
+
+  const paymentLabel =
+    paymentMethod === "card" ? card : paymentMethod === "bank" ? "Direct bank transfer" : "Cash on delivery";
+
+  const handlePlaceOrder = () => {
+    if (orderItems.length === 0) {
+      showNotice("Your cart is empty");
+      return;
+    }
+    setOrder({ items: orderItems, total, payment: paymentLabel });
+    clearCart();
+  };
 
   return (
     <Box sx={{ maxWidth: "1200px", mx: "auto", my: 6, px: { xs: "20px", md: "0" } }}>
       
       {/* Навигарияи боло (Breadcrumbs) */}
       <Typography sx={{ display: { xs: "none", md: "block" }, fontSize: "14px", color: "#727272", mb: 5 }}>
-        <span style={{ fontWeight: "bold", color: "#3D3D3D" }}>Home</span> / Shop / Checkout
+        <span
+          onClick={() => navigate("/")}
+          style={{ fontWeight: "bold", color: "#3D3D3D", cursor: "pointer" }}
+        >
+          Home
+        </span>{" "}
+        / Shop / Checkout
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px" }}>
@@ -174,13 +198,36 @@ const Checkout = () => {
 
           <FormControl component="fieldset" sx={{ width: "100%", mb: 4 }}>
             <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-              <Box sx={{ display: "flex", alignItems: "center", border: "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1, mb: 1.5 }}>
-                <FormControlLabel value="paypal" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="PayPal / Master / Visa" />
+              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "card" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1, mb: 1.5 }}>
+                <FormControlLabel value="card" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="" sx={{ mr: 0 }} />
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  {cards.map((item) => (
+                    <Typography
+                      key={item}
+                      onClick={() => {
+                        setPaymentMethod("card");
+                        setCard(item);
+                      }}
+                      sx={{
+                        px: 1,
+                        py: 0.3,
+                        fontSize: "13px",
+                        cursor: "pointer",
+                        borderRadius: "4px",
+                        border: paymentMethod === "card" && card === item ? "1px solid #46A358" : "1px solid #eaeaea",
+                        color: paymentMethod === "card" && card === item ? "#46A358" : "#3D3D3D",
+                        fontWeight: paymentMethod === "card" && card === item ? "bold" : "normal",
+                      }}
+                    >
+                      {item}
+                    </Typography>
+                  ))}
+                </Box>
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", border: "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1, mb: 1.5 }}>
+              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "bank" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1, mb: 1.5 }}>
                 <FormControlLabel value="bank" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="Direct bank transfer" />
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", border: "1px solid #46A358", borderRadius: "4px", px: 2, py: 1, borderColor: "#46A358" }}>
+              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "cash" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1 }}>
                 <FormControlLabel value="cash" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="Cash on delivery" />
               </Box>
             </RadioGroup>
@@ -189,6 +236,7 @@ const Checkout = () => {
           <Button 
             fullWidth 
             variant="contained" 
+            onClick={handlePlaceOrder}
             sx={{ 
               backgroundColor: "#46A358", 
               color: "#fff", 
@@ -205,6 +253,20 @@ const Checkout = () => {
         </Box>
 
       </Box>
+
+      {/* Dialog: Your order has been received */}
+      <OrderModal
+        open={Boolean(order)}
+        onClose={() => setOrder(null)}
+        items={order ? order.items : []}
+        total={order ? order.total : 0}
+        payment={order ? order.payment : ""}
+        onTrack={() => {
+          setOrder(null);
+          showNotice("Спасибо за покупку");
+          navigate("/");
+        }}
+      />
     </Box>
   );
 };

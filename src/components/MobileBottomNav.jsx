@@ -1,15 +1,34 @@
 import { FavoriteBorder, HomeOutlined, PersonOutlineOutlined, ShoppingCartOutlined } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Badge } from "@mui/material";
 import { NavLink } from "react-router";
 
-const items = [
-  { label: "Home", icon: <HomeOutlined />, to: "/" },
-  { label: "Wishlist", icon: <FavoriteBorder />, to: "/shop" },
-  { label: "Cart", icon: <ShoppingCartOutlined />, to: "/cart" },
-  { label: "Account", icon: <PersonOutlineOutlined />, to: "/login" },
-];
+export default function MobileBottomNav({ user, cartCount = 0, onLoginClick }) {
+  const items = [
+    { label: "Home", icon: <HomeOutlined />, to: "/" },
+    { label: "Wishlist", icon: <FavoriteBorder />, to: "/my-account" },
+    {
+      label: "Cart",
+      icon: (
+        <Badge
+          badgeContent={cartCount}
+          sx={{
+            "& .MuiBadge-badge": {
+              minWidth: 16,
+              height: 16,
+              backgroundColor: "#46a358",
+              color: "#fff",
+              fontSize: 10,
+            },
+          }}
+        >
+          <ShoppingCartOutlined />
+        </Badge>
+      ),
+      to: "/cart",
+    },
+    { label: "Account", icon: <PersonOutlineOutlined />, to: user ? "/my-account" : null },
+  ];
 
-export default function MobileBottomNav() {
   return (
     <Box
       component="nav"
@@ -29,21 +48,32 @@ export default function MobileBottomNav() {
         boxShadow: "0 -6px 22px rgba(34, 74, 42, .08)",
       }}
     >
-      {items.map((item) => (
-        <IconButton
-          key={item.label}
-          component={NavLink}
-          to={item.to}
-          aria-label={item.label}
-          sx={{
-            color: "#c8cbc9",
-            "&.active": { color: "#46a358" },
-            "& svg": { fontSize: 24 },
-          }}
-        >
-          {item.icon}
-        </IconButton>
-      ))}
+      {items.map((item) =>
+        item.to ? (
+          <IconButton
+            key={item.label}
+            component={NavLink}
+            to={item.to}
+            aria-label={item.label}
+            sx={{
+              color: "#c8cbc9",
+              "&.active": { color: "#46a358" },
+              "& svg": { fontSize: 24 },
+            }}
+          >
+            {item.icon}
+          </IconButton>
+        ) : (
+          <IconButton
+            key={item.label}
+            onClick={onLoginClick}
+            aria-label={item.label}
+            sx={{ color: "#c8cbc9", "& svg": { fontSize: 24 } }}
+          >
+            {item.icon}
+          </IconButton>
+        )
+      )}
     </Box>
   );
 }

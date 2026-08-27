@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate, useParams, useOutletContext } from "react-router";
 import { Box, Typography, Button, IconButton } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -12,9 +14,13 @@ import EmailIcon from "@mui/icons-material/Email";
 import { plants } from "../../data/api";
 
 const ProductDetails = () => {
-  // Маҳсулоти якумро мегирем (метавонед бо ID иваз кунед)
-  const product = plants[0];
-  
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart, wishlist, toggleWishlist } = useOutletContext();
+
+  // Маҳсулот аз рӯи id-и URL пайдо мешавад (агар набошад, якумӣ)
+  const product = plants.find((item) => item.id === Number(id)) || plants[0];
+
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
   const [selectedSize, setSelectedSize] = useState("S");
   const [quantity, setQuantity] = useState(1);
@@ -25,7 +31,13 @@ const ProductDetails = () => {
       
       {/* Навигарияи боло (Breadcrumbs) */}
       <Typography sx={{ fontSize: "14px", color: "#727272", mb: 4 }}>
-        <span style={{ fontWeight: "bold", color: "#3D3D3D" }}>Home</span> / Shop
+        <span
+          onClick={() => navigate("/")}
+          style={{ fontWeight: "bold", color: "#3D3D3D", cursor: "pointer" }}
+        >
+          Home
+        </span>{" "}
+        / Shop
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px", mb: 8 }}>
@@ -34,7 +46,7 @@ const ProductDetails = () => {
         <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", md: "row" }, gap: "20px", flex: 1 }}>
           
           {/* 4 та сурати хурд */}
-          <Box sx={{ display: "flex", flexDirection: { xs: "row", md: "column" }, gap: "15px" }}>
+          <Box sx={{ display: "flex", flexDirection: { xs: "row", md: "column" }, gap: "15px", overflowX: { xs: "auto", md: "visible" } }}>
             {product.images.slice(0, 4).map((img, idx) => (
               <Box 
                 key={idx}
@@ -94,7 +106,7 @@ const ProductDetails = () => {
               ))}
               <StarBorderIcon sx={{ color: "#FFAC0C", fontSize: "16px" }} />
               <Typography sx={{ fontSize: "14px", color: "#727272", ml: 1 }}>
-                19 Customer Review
+                {product.reviews} Customer Review
               </Typography>
             </Box>
           </Box>
@@ -145,24 +157,38 @@ const ProductDetails = () => {
               </IconButton>
             </Box>
 
-            <Button variant="outlined" sx={{ borderColor: "#46A358", color: "#46A358", px: { xs: 2, md: 4 }, py: 1.2, fontWeight: "bold", borderRadius: "6px", textTransform: "none", "&:hover": { borderColor: "#3a8a49", backgroundColor: "rgba(70,163,88,0.05)" } }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                addToCart(product, quantity);
+                navigate("/cart");
+              }}
+              sx={{ borderColor: "#46A358", color: "#46A358", px: { xs: 2, md: 4 }, py: 1.2, fontWeight: "bold", borderRadius: "6px", textTransform: "none", "&:hover": { borderColor: "#3a8a49", backgroundColor: "rgba(70,163,88,0.05)" } }}
+            >
               BUY NOW
             </Button>
 
-            <Button variant="contained" sx={{ backgroundColor: "#46A358", color: "#fff", px: { xs: 2, md: 4 }, py: 1.2, fontWeight: "bold", borderRadius: "6px", textTransform: "none", "&:hover": { backgroundColor: "#3a8a49" } }}>
+            <Button
+              variant="contained"
+              onClick={() => addToCart(product, quantity)}
+              sx={{ backgroundColor: "#46A358", color: "#fff", px: { xs: 2, md: 4 }, py: 1.2, fontWeight: "bold", borderRadius: "6px", textTransform: "none", "&:hover": { backgroundColor: "#3a8a49" } }}
+            >
               ADD TO CART
             </Button>
 
-            <IconButton sx={{ border: "1px solid #46A358", borderRadius: "6px", p: 1.2, color: "#46A358" }}>
-              <FavoriteBorderIcon />
+            <IconButton
+              onClick={() => toggleWishlist(product.id)}
+              sx={{ border: "1px solid #46A358", borderRadius: "6px", p: 1.2, color: "#46A358" }}
+            >
+              {wishlist.includes(product.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </IconButton>
           </Box>
 
           {/* Маълумоти поёнӣ */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1, fontSize: "14px", color: "#727272" }}>
-            <Typography sx={{ fontSize: "14px" }}><b>SKU:</b> 1995751877966</Typography>
+            <Typography sx={{ fontSize: "14px" }}><b>SKU:</b> 19957518{product.id}</Typography>
             <Typography sx={{ fontSize: "14px" }}><b>Categories:</b> {product.categories}</Typography>
-            <Typography sx={{ fontSize: "14px" }}><b>Tags:</b> Home, Garden, Plants</Typography>
+            <Typography sx={{ fontSize: "14px" }}><b>Tags:</b> {product.tags.join(", ")}</Typography>
             
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 2 }}>
               <Typography sx={{ fontSize: "14px", fontWeight: "bold", color: "#3D3D3D" }}>Share this products:</Typography>

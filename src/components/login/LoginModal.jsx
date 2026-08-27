@@ -5,10 +5,34 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
-const LoginModal = ({ open = true, onClose }) => {
+const LoginModal = ({ open = false, onClose, onAuth }) => {
+  const [isLogin, setIsLogin] = useState(false); // Агар false бошад, саҳифаи Register кушода мешавад
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   if (!open) return null;
 
-  const [isLogin, setIsLogin] = useState(false); // Агар false бошад, саҳифаи Register кушода мешавад
+  // Login: email ва password лозим
+  const handleLogin = () => {
+    if (!email || !password) {
+      setError("Enter your email and password");
+      return;
+    }
+    setError("");
+    onAuth({ name: email.split("@")[0], email, phone: "", code: "" });
+  };
+
+  // Register: name, email ва password лозим
+  const handleRegister = () => {
+    if (!name || !email || !password) {
+      setError("Fill in all fields");
+      return;
+    }
+    setError("");
+    onAuth({ name, email, phone: "", code: "" });
+  };
 
   return (
     <Box 
@@ -84,6 +108,8 @@ const LoginModal = ({ open = true, onClose }) => {
             <TextField 
               fullWidth 
               placeholder="almamun_uxui@outlook.com" 
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               variant="outlined" 
               size="small" 
               sx={{ mb: 2.5, backgroundColor: "#fff" }}
@@ -93,7 +119,9 @@ const LoginModal = ({ open = true, onClose }) => {
               <TextField 
                 fullWidth 
                 type="password" 
-                defaultValue="password123" 
+                placeholder="password123"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 variant="outlined" 
                 size="small" 
                 sx={{ backgroundColor: "#fff" }}
@@ -112,6 +140,7 @@ const LoginModal = ({ open = true, onClose }) => {
             <Button 
               fullWidth 
               variant="contained" 
+              onClick={handleLogin}
               sx={{ 
                 backgroundColor: "#46A358", 
                 color: "#fff", 
@@ -136,6 +165,8 @@ const LoginModal = ({ open = true, onClose }) => {
             <TextField 
               fullWidth 
               placeholder="Username" 
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               variant="outlined" 
               size="small" 
               sx={{ mb: 2, backgroundColor: "#fff" }}
@@ -144,6 +175,8 @@ const LoginModal = ({ open = true, onClose }) => {
             <TextField 
               fullWidth 
               placeholder="Enter your email address" 
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               variant="outlined" 
               size="small" 
               sx={{ mb: 2, backgroundColor: "#fff" }}
@@ -154,6 +187,8 @@ const LoginModal = ({ open = true, onClose }) => {
                 fullWidth 
                 type="password" 
                 placeholder="Password" 
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 variant="outlined" 
                 size="small" 
                 sx={{ backgroundColor: "#fff" }}
@@ -175,6 +210,7 @@ const LoginModal = ({ open = true, onClose }) => {
             <Button 
               fullWidth 
               variant="contained" 
+              onClick={handleRegister}
               sx={{ 
                 backgroundColor: "#46A358", 
                 color: "#fff", 
@@ -189,6 +225,10 @@ const LoginModal = ({ open = true, onClose }) => {
               Register
             </Button>
           </>
+        )}
+
+        {error && (
+          <Typography sx={{ mb: 2, fontSize: "13px", color: "#d32f2f" }}>{error}</Typography>
         )}
 
         {/* Хатти "Or with" */}
