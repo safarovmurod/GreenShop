@@ -1,13 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { animate, stagger, splitText } from "animejs";
 import { motion } from "motion/react";
-import bannerImg from "../../assets/01 1.png";
+import bannerImg1 from "../../assets/01 1.png";
+import bannerImg2 from "../../assets/pngwing.com (5).png";
+import bannerImg3 from "../../assets/pngwing.com (8).png";
+
+// Суратҳои слайдер (аз assets-и худи лоиҳа)
+const slides = [bannerImg1, bannerImg2, bannerImg3];
 
 const HeroSection = () => {
   const titleRef = useRef(null);
   const welcomeRef = useRef(null);
   const startedRef = useRef(false); // то ки аниматсия ду бор иҷро нашавад
+  const [slide, setSlide] = useState(0); // сурати ҷории слайдер
+
+  // Ҳар 4 сония сурат худаш иваз мешавад.
+  // slide дар [] аст, то ки баъди клик ҳисоб аз нав сар шавад.
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [slide]);
 
   // anime.js: сарлавҳа ҳарф ба ҳарф пайдо мешавад
   useEffect(() => {
@@ -128,7 +143,8 @@ const HeroSection = () => {
       >
         <Box
           component={motion.img}
-          src={bannerImg}
+          key={slide}
+          src={slides[slide]}
           alt="Greenshop Plant"
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1, y: [0, -12, 0] }}
@@ -155,9 +171,19 @@ const HeroSection = () => {
           gap: "8px",
         }}
       >
-        <Box sx={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#c5e0cb" }} />
-        <Box sx={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#46A358" }} />
-        <Box sx={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#c5e0cb" }} />
+        {slides.map((item, index) => (
+          <Box
+            key={index}
+            onClick={() => setSlide(index)}
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              cursor: "pointer",
+              backgroundColor: slide === index ? "#46A358" : "#c5e0cb",
+            }}
+          />
+        ))}
       </Box>
     </Box>
   );
