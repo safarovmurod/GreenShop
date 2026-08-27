@@ -1,8 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Box, Typography, Button } from "@mui/material";
+import { animate, stagger, splitText } from "animejs";
+import { motion } from "motion/react";
 import bannerImg from "../../assets/01 1.png";
 
 const HeroSection = () => {
+  const titleRef = useRef(null);
+  const welcomeRef = useRef(null);
+  const startedRef = useRef(false); // то ки аниматсия ду бор иҷро нашавад
+
+  // anime.js: сарлавҳа ҳарф ба ҳарф пайдо мешавад
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
+    const { chars } = splitText(welcomeRef.current, { chars: true });
+    animate(chars, {
+      opacity: [0, 1],
+      y: [12, 0],
+      duration: 600,
+      delay: stagger(25),
+      ease: "out(3)",
+    });
+
+    const words = splitText(titleRef.current, { words: true }).words;
+    animate(words, {
+      opacity: [0, 1],
+      y: [40, 0],
+      duration: 900,
+      delay: stagger(80, { start: 200 }),
+      ease: "out(4)",
+    });
+  }, []);
+
   return (
     <Box
       sx={{
@@ -21,6 +51,7 @@ const HeroSection = () => {
     >
       <Box sx={{ flex: 1, pr: { md: 4 } }}>
         <Typography
+          ref={welcomeRef}
           sx={{
             color: "#3D3D3D",
             fontWeight: 500,
@@ -35,6 +66,7 @@ const HeroSection = () => {
 
         <Typography
           variant="h1"
+          ref={titleRef}
           sx={{
             color: "#3D3D3D",
             fontWeight: 900,
@@ -49,6 +81,8 @@ const HeroSection = () => {
         </Typography>
 
         <Typography
+          data-aos="fade-up"
+          data-aos-delay="500"
           sx={{
             color: "#727272",
             fontSize: "14px",
@@ -63,6 +97,11 @@ const HeroSection = () => {
         </Typography>
 
         <Button
+          component={motion.button}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          data-aos="fade-up"
+          data-aos-delay="650"
           sx={{
             backgroundColor: "#46A358",
             color: "#fff",
@@ -88,9 +127,16 @@ const HeroSection = () => {
         }}
       >
         <Box
-          component="img"
+          component={motion.img}
           src={bannerImg}
           alt="Greenshop Plant"
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1, y: [0, -12, 0] }}
+          transition={{
+            opacity: { duration: 0.8 },
+            scale: { duration: 0.8 },
+            y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+          }}
           sx={{
             maxWidth: "100%",
             maxHeight: "400px",

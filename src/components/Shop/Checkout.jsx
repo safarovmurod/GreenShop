@@ -11,6 +11,7 @@ import {
   FormControl 
 } from "@mui/material";
 import { useNavigate, useOutletContext } from "react-router";
+import { motion } from "motion/react";
 import OrderModal from "./OrderModal";
 
 // Кортҳои пардохт
@@ -61,7 +62,7 @@ const Checkout = () => {
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px" }}>
         
         {/* Қисми чап: Billing Address */}
-        <Box sx={{ flex: 1.3 }}>
+        <Box data-aos="fade-right" sx={{ flex: 1.3 }}>
           <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "#3D3D3D", mb: 3 }}>
             Billing Address
           </Typography>
@@ -137,7 +138,7 @@ const Checkout = () => {
         </Box>
 
         {/* Қисми рост: Your Order */}
-        <Box sx={{ flex: 1 }}>
+        <Box data-aos="fade-left" sx={{ flex: 1 }}>
           <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "#3D3D3D", mb: 3, borderBottom: "1px solid #eaeaea", pb: 1.5 }}>
             Your Order
           </Typography>
@@ -148,8 +149,15 @@ const Checkout = () => {
           </Box>
 
           {/* Рӯйхати маҳсулот */}
-          {orderItems.map((item) => (
-            <Box key={item.id} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, backgroundColor: "#FBFBFB", p: 1.5, borderRadius: "4px" }}>
+          {orderItems.map((item, index) => (
+            <Box
+              component={motion.div}
+              key={item.id}
+              initial={{ opacity: 0, x: 25 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, backgroundColor: "#FBFBFB", p: 1.5, borderRadius: "4px" }}
+            >
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <Box component="img" src={item.images[0]} alt="" sx={{ width: "50px", height: "50px", objectFit: "contain" }} />
                 <Box>
@@ -203,6 +211,9 @@ const Checkout = () => {
                 <Box sx={{ display: "flex", gap: 1 }}>
                   {cards.map((item) => (
                     <Typography
+                      component={motion.div}
+                      whileHover={{ scale: 1.08 }}
+                      whileTap={{ scale: 0.94 }}
                       key={item}
                       onClick={() => {
                         setPaymentMethod("card");
@@ -236,6 +247,9 @@ const Checkout = () => {
           <Button 
             fullWidth 
             variant="contained" 
+            component={motion.button}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={handlePlaceOrder}
             sx={{ 
               backgroundColor: "#46A358", 

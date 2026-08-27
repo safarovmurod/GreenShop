@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { motion } from "motion/react";
 import { useNavigate, useOutletContext } from "react-router";
 import { plants } from "../../data/api";
 import SuperSaleVideo from "./SuperSaleVideo";
@@ -77,7 +78,7 @@ const ShopSection = () => {
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "40px" }}>
 
         {/* Қисми чап: Филтрҳо ва Баннер */}
-        <Box sx={{ display: { xs: "none", md: "block" }, width: { xs: "100%", md: "250px" }, flexShrink: 0 }}>
+        <Box data-aos="fade-right" sx={{ display: { xs: "none", md: "block" }, width: { xs: "100%", md: "250px" }, flexShrink: 0 }}>
           <Typography sx={{ fontWeight: "bold", fontSize: "18px", mb: 2, color: "#3D3D3D" }}>
             Categories
           </Typography>
@@ -98,7 +99,7 @@ const ShopSection = () => {
             ))}
           </Box>
 
-          <Typography sx={{ fontWeight: "bold", fontSize: "18px", mb: 2, color: "#3D3D3D" }}>
+          <Typography data-aos="fade-right" data-aos-delay="100" sx={{ fontWeight: "bold", fontSize: "18px", mb: 2, color: "#3D3D3D" }}>
             Price Range
           </Typography>
           <Box sx={{ pl: 1, mb: 4 }}>
@@ -113,6 +114,9 @@ const ShopSection = () => {
               Price: <span style={{ color: "#46A358", fontWeight: "bold" }}>${price[0]} - ${price[1]}</span>
             </Typography>
             <Button
+              component={motion.button}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
               onClick={() => setPage(1)}
               sx={{ backgroundColor: "#46A358", color: "#fff", px: 3, py: 0.5, fontWeight: "bold", textTransform: "none", borderRadius: "6px", "&:hover": { backgroundColor: "#3a8a49" } }}
             >
@@ -120,7 +124,7 @@ const ShopSection = () => {
             </Button>
           </Box>
 
-          <Typography sx={{ fontWeight: "bold", fontSize: "18px", mb: 2, color: "#3D3D3D" }}>
+          <Typography data-aos="fade-right" data-aos-delay="150" sx={{ fontWeight: "bold", fontSize: "18px", mb: 2, color: "#3D3D3D" }}>
             Size
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", mb: 4, pl: 1 }}>
@@ -141,12 +145,14 @@ const ShopSection = () => {
           </Box>
 
           {/* Super Sale: ба ҷои сурат видео (play/pause бо ref) */}
-          <SuperSaleVideo ref={videoRef} onClick={() => videoRef.current.toggle()} />
+          <Box data-aos="zoom-in" data-aos-delay="200">
+            <SuperSaleVideo ref={videoRef} onClick={() => videoRef.current.toggle()} />
+          </Box>
         </Box>
 
         {/* Қисми рост: Маҳсулот ва Пагинация */}
         <Box sx={{ flex: 1 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, borderBottom: "1px solid #f0f0f0", pb: 1 }}>
+          <Box data-aos="fade-down" sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, borderBottom: "1px solid #f0f0f0", pb: 1 }}>
             <Box sx={{ display: "flex", gap: "30px" }}>
               <Typography
                 onClick={() => setTab("all")}
@@ -193,9 +199,14 @@ const ShopSection = () => {
           </Box>
 
           <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }, gap: { xs: "18px", md: "30px" }, rowGap: { xs: "28px", md: "40px" } }}>
-            {currentPlants.map((plant) => (
+            {currentPlants.map((plant, index) => (
               <Box
-                key={plant.id}
+                component={motion.div}
+                key={`${page}-${tab}-${category}-${size}-${sort}-${plant.id}`}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: index * 0.07, ease: "easeOut" }}
+                whileHover={{ y: -6 }}
                 onClick={() => navigate(`/shop/${plant.id}`)}
                 sx={{ cursor: "pointer", "&:hover .card-icons": { opacity: 1 } }}
               >
@@ -205,6 +216,10 @@ const ShopSection = () => {
                   {/* Нишони Sale мисли Figma */}
                   {plant.sale && (
                     <Typography
+                      component={motion.div}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.25 + index * 0.07, type: "spring", stiffness: 300 }}
                       sx={{ position: "absolute", top: 0, left: 0, px: 1, py: 0.4, backgroundColor: "#46A358", color: "#fff", fontSize: "12px", fontWeight: "bold" }}
                     >
                       {Math.round(((plant.oldPrice - plant.price) / plant.oldPrice) * 100)}% OFF
@@ -226,6 +241,9 @@ const ShopSection = () => {
                     }}
                   >
                     <IconButton
+                      component={motion.button}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
                       aria-label="Add to cart"
                       onClick={(event) => {
                         event.stopPropagation();
@@ -237,6 +255,9 @@ const ShopSection = () => {
                     </IconButton>
 
                     <IconButton
+                      component={motion.button}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
                       aria-label="Add to wishlist"
                       onClick={(event) => {
                         event.stopPropagation();
@@ -252,6 +273,9 @@ const ShopSection = () => {
                     </IconButton>
 
                     <IconButton
+                      component={motion.button}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
                       aria-label="View product"
                       onClick={(event) => {
                         event.stopPropagation();

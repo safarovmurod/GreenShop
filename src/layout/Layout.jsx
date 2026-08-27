@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import { Box, Snackbar, Alert } from "@mui/material";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -17,11 +19,23 @@ function readStorage(key, fallback) {
 }
 
 export default function Layout() {
+  const location = useLocation();
   const [cart, setCart] = useState(() => readStorage("cart", []));
   const [wishlist, setWishlist] = useState(() => readStorage("wishlist", []));
   const [user, setUser] = useState(() => readStorage("user", null));
   const [loginOpen, setLoginOpen] = useState(false);
   const [notice, setNotice] = useState("");
+
+  // AOS: аниматсияи scroll барои ҳамаи секцияҳо
+  useEffect(() => {
+    AOS.init({ duration: 700, once: true, offset: 60, easing: "ease-out-cubic" });
+  }, []);
+
+  // Ҳангоми иваз шудани саҳифа AOS-ро нав мекунем
+  useEffect(() => {
+    AOS.refresh();
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));

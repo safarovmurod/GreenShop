@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useNavigate, useOutletContext } from "react-router";
+import { motion, AnimatePresence } from "motion/react";
 
 const ShoppingCart = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const ShoppingCart = () => {
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "40px" }}>
         
         {/* Қисми чап: Ҷадвали маҳсулот */}
-        <Box sx={{ flex: 2 }}>
+        <Box data-aos="fade-right" sx={{ flex: 2 }}>
           
           {/* Сарлавҳаи ҷадвал */}
           <Box sx={{ display: { xs: "none", md: "grid" }, gridTemplateColumns: "2fr 1fr 1fr 1fr 0.5fr", pb: 2, borderBottom: "1px solid #eaeaea", fontWeight: "bold", color: "#3D3D3D" }}>
@@ -53,9 +54,16 @@ const ShoppingCart = () => {
           )}
 
           {/* Рӯйхати маҳсулоти сават */}
+          <AnimatePresence initial={false}>
           {cartItems.map((item) => (
             <Box 
+              component={motion.div}
               key={item.id} 
+              layout
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 60, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               sx={{ 
                 display: "grid", 
                 gridTemplateColumns: { xs: "1fr auto", md: "2fr 1fr 1fr 1fr 0.5fr" },
@@ -94,13 +102,26 @@ const ShoppingCart = () => {
               {/* Миқдор (+ ва -) */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, md: 1.5 } }}>
                 <IconButton 
+                  component={motion.button}
+                  whileTap={{ scale: 0.85 }}
                   onClick={() => decreaseQty(item.id)} 
                   sx={{ color: "#fff", backgroundColor: "#46A358", width: "24px", height: "24px", "&:hover": { backgroundColor: "#3a8a49" } }}
                 >
                   <RemoveIcon sx={{ fontSize: "14px" }} />
                 </IconButton>
-                <Typography sx={{ fontWeight: "bold", fontSize: "15px" }}>{item.quantity}</Typography>
+                <Typography
+                  component={motion.span}
+                  key={item.quantity}
+                  initial={{ scale: 1.5, color: "#46A358" }}
+                  animate={{ scale: 1, color: "#3D3D3D" }}
+                  transition={{ duration: 0.3 }}
+                  sx={{ fontWeight: "bold", fontSize: "15px" }}
+                >
+                  {item.quantity}
+                </Typography>
                 <IconButton 
+                  component={motion.button}
+                  whileTap={{ scale: 0.85 }}
                   onClick={() => increaseQty(item.id)} 
                   sx={{ color: "#fff", backgroundColor: "#46A358", width: "24px", height: "24px", "&:hover": { backgroundColor: "#3a8a49" } }}
                 >
@@ -114,16 +135,23 @@ const ShoppingCart = () => {
               </Typography>
 
               {/* Нест кардан */}
-              <IconButton onClick={() => removeFromCart(item.id)} sx={{ color: "#727272", "&:hover": { color: "#d32f2f" } }}>
+              <IconButton
+                component={motion.button}
+                whileHover={{ scale: 1.2, rotate: -8 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => removeFromCart(item.id)}
+                sx={{ color: "#727272", "&:hover": { color: "#d32f2f" } }}
+              >
                 <DeleteOutlinedIcon />
               </IconButton>
             </Box>
           ))}
+          </AnimatePresence>
 
         </Box>
 
         {/* Қисми рост: Cart Totals */}
-        <Box sx={{ flex: 1, backgroundColor: "#FBFBFB", p: 3, height: "fit-content", borderTop: "3px solid #46A358" }}>
+        <Box data-aos="fade-left" sx={{ flex: 1, backgroundColor: "#FBFBFB", p: 3, height: "fit-content", borderTop: "3px solid #46A358" }}>
           <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "#3D3D3D", mb: 3, borderBottom: "1px solid #eaeaea", pb: 1.5 }}>
             Cart Totals
           </Typography>
@@ -169,6 +197,9 @@ const ShoppingCart = () => {
           <Button 
             fullWidth 
             variant="contained" 
+            component={motion.button}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => navigate("/checkout")}
             sx={{ 
               backgroundColor: "#46A358", 

@@ -5,8 +5,11 @@ import {
   Search,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
+import { useEffect, useRef } from "react";
 import { Box, IconButton, Stack, Button, Badge } from "@mui/material";
 import { NavLink, useNavigate } from "react-router";
+import { animate } from "animejs";
+import { motion } from "motion/react";
 import logo from "../assets/Logo (1).png";
 
 const links = [
@@ -18,6 +21,17 @@ const links = [
 
 export default function Header({ user, cartCount = 0, onLoginClick }) {
   const navigate = useNavigate();
+  const cartRef = useRef(null);
+
+  // anime.js: ҳангоми илова шудани маҳсулот иконкаи сават "мепарад"
+  useEffect(() => {
+    if (cartCount === 0) return;
+    animate(cartRef.current, {
+      scale: [1, 1.35, 1],
+      duration: 600,
+      ease: "outElastic(1, .5)",
+    });
+  }, [cartCount]);
 
   return (
     <Box
@@ -101,6 +115,7 @@ export default function Header({ user, cartCount = 0, onLoginClick }) {
             <Search sx={{ fontSize: 21 }} />
           </IconButton>
           <IconButton
+            ref={cartRef}
             aria-label="Shopping cart"
             onClick={() => navigate("/cart")}
             sx={{ color: "#3d3d3d", p: 0.8, "&:hover": { color: "#46a358" } }}
@@ -128,7 +143,9 @@ export default function Header({ user, cartCount = 0, onLoginClick }) {
           </IconButton>
           {user ? (
             <Button
-              component={NavLink}
+              component={motion(NavLink)}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
               to="/my-account"
               startIcon={<PersonOutlineOutlined sx={{ fontSize: 17 }} />}
               sx={{
@@ -148,6 +165,9 @@ export default function Header({ user, cartCount = 0, onLoginClick }) {
             </Button>
           ) : (
             <Button
+              component={motion.button}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
               onClick={onLoginClick}
               startIcon={<LoginOutlined sx={{ fontSize: 17 }} />}
               sx={{

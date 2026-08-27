@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { motion } from "motion/react";
 
 const LoginModal = ({ open = false, onClose, onAuth }) => {
   const [isLogin, setIsLogin] = useState(false); // Агар false бошад, саҳифаи Register кушода мешавад
@@ -36,6 +37,10 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
 
   return (
     <Box 
+      component={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.25 }}
       sx={{ 
         position: "fixed", 
         top: 0, 
@@ -51,6 +56,10 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
       }}
     >
       <Box 
+        component={motion.div}
+        initial={{ opacity: 0, scale: 0.92, y: 25 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: "easeOut" }}
         sx={{ 
           backgroundColor: "#fff", 
           width: "100%", 
@@ -100,7 +109,7 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
 
         {/* ФОРМАИ LOGIN */}
         {isLogin ? (
-          <>
+          <Box component={motion.div} key="login" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 2 }}>
               Enter your username and password to login.
             </Typography>
@@ -140,6 +149,9 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
             <Button 
               fullWidth 
               variant="contained" 
+              component={motion.button}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={handleLogin}
               sx={{ 
                 backgroundColor: "#46A358", 
@@ -154,10 +166,10 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
             >
               Login
             </Button>
-          </>
+          </Box>
         ) : (
           /* ФОРМАИ REGISTER */
-          <>
+          <Box component={motion.div} key="register" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
             <Typography sx={{ fontSize: "14px", color: "#3D3D3D", mb: 2 }}>
               Enter your email and password to register.
             </Typography>
@@ -210,6 +222,9 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
             <Button 
               fullWidth 
               variant="contained" 
+              component={motion.button}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={handleRegister}
               sx={{ 
                 backgroundColor: "#46A358", 
@@ -224,7 +239,7 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
             >
               Register
             </Button>
-          </>
+          </Box>
         )}
 
         {error && (

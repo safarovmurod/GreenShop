@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
+import { motion } from "motion/react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // Суратҳоро метавонед ба суратҳои дилхоҳи худ иваз кунед
@@ -22,6 +23,7 @@ const PromoBanners = () => {
       
       {/* Баннери якум: Summer Cactus & Succulents */}
       <Box 
+        data-aos="fade-right"
         sx={{ 
           flex: 1, 
           backgroundColor: "#FBFBFB", 
@@ -51,6 +53,9 @@ const PromoBanners = () => {
           </Typography>
           <Button 
             variant="contained" 
+            component={motion.button}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
             endIcon={<ArrowForwardIcon sx={{ fontSize: "16px !important" }} />}
             sx={{ 
               backgroundColor: "#46A358", 
@@ -71,6 +76,7 @@ const PromoBanners = () => {
 
       {/* Баннери дуюм: Styling Trends & Much More */}
       <Box 
+        data-aos="fade-left"
         sx={{ 
           flex: 1, 
           backgroundColor: "#FBFBFB", 
@@ -100,6 +106,9 @@ const PromoBanners = () => {
           </Typography>
           <Button 
             variant="contained" 
+            component={motion.button}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
             endIcon={<ArrowForwardIcon sx={{ fontSize: "16px !important" }} />}
             sx={{ 
               backgroundColor: "#46A358", 

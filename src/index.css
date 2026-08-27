@@ -17,6 +17,9 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  /* AOS: fade-left/fade-right то фаъол шудан 100px дуртаранд,
+     барои он ки scroll-и уфуқӣ насозанд */
+  overflow-x: hidden;
 }
 @media (max-width: 899px) {
   body {

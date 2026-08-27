@@ -9,7 +9,7 @@ const basics = [
 export default function CareBasics() {
   return (
     <Box id="basics" sx={{ maxWidth: 1200, mx: "auto", px: { xs: 2, md: 0 }, py: { xs: 6, md: 9 } }}>
-      <Typography component="h2" sx={{ color: "#3d3d3d", fontSize: 30, fontWeight: 700 }}>The essentials</Typography>
+      <Typography component="h2" data-aos="fade-up" sx={{ color: "#3d3d3d", fontSize: 30, fontWeight: 700 }}>The essentials</Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 3, mt: 4 }}>
         {basics.map(([number, title, text]) => (
           <Box key={number} sx={{ borderTop: "2px solid #46a358", pt: 2 }}>

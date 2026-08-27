@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router";
+import { motion } from "motion/react";
 import { Box, Typography, Button, IconButton } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -43,7 +44,7 @@ const ProductDetails = () => {
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px", mb: 8 }}>
         
         {/* Қисми чап: Галереяи суратҳо */}
-        <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", md: "row" }, gap: "20px", flex: 1 }}>
+        <Box data-aos="fade-right" sx={{ display: "flex", flexDirection: { xs: "column-reverse", md: "row" }, gap: "20px", flex: 1 }}>
           
           {/* 4 та сурати хурд */}
           <Box sx={{ display: "flex", flexDirection: { xs: "row", md: "column" }, gap: "15px", overflowX: { xs: "auto", md: "visible" } }}>
@@ -81,7 +82,11 @@ const ProductDetails = () => {
             }}
           >
             <Box 
-              component="img" 
+              component={motion.img}
+              key={selectedImage}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
               src={selectedImage} 
               alt={product.name} 
               sx={{ width: "80%", height: "80%", objectFit: "contain" }} 
@@ -91,7 +96,7 @@ const ProductDetails = () => {
         </Box>
 
         {/* Қисми рост: Маълумот ва харид */}
-        <Box sx={{ flex: 1 }}>
+        <Box data-aos="fade-left" sx={{ flex: 1 }}>
           <Typography sx={{ fontSize: "28px", fontWeight: "bold", color: "#3D3D3D", mb: 1 }}>
             {product.name}
           </Typography>
@@ -159,6 +164,9 @@ const ProductDetails = () => {
 
             <Button
               variant="outlined"
+              component={motion.button}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => {
                 addToCart(product, quantity);
                 navigate("/cart");
@@ -170,6 +178,9 @@ const ProductDetails = () => {
 
             <Button
               variant="contained"
+              component={motion.button}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => addToCart(product, quantity)}
               sx={{ backgroundColor: "#46A358", color: "#fff", px: { xs: 2, md: 4 }, py: 1.2, fontWeight: "bold", borderRadius: "6px", textTransform: "none", "&:hover": { backgroundColor: "#3a8a49" } }}
             >
@@ -177,6 +188,9 @@ const ProductDetails = () => {
             </Button>
 
             <IconButton
+              component={motion.button}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => toggleWishlist(product.id)}
               sx={{ border: "1px solid #46A358", borderRadius: "6px", p: 1.2, color: "#46A358" }}
             >
@@ -208,7 +222,7 @@ const ProductDetails = () => {
       {/* ========================================== */}
       {/* ҚИСМИ ПОЁН: Product Description & Reviews  */}
       {/* ========================================== */}
-      <Box sx={{ mt: 10 }}>
+      <Box data-aos="fade-up" sx={{ mt: 10 }}>
         
         {/* Табҳо (Tabs) */}
         <Box sx={{ display: "flex", gap: 5, borderBottom: "1px solid #eaeaea", pb: 1.5, mb: 4 }}>
@@ -244,7 +258,14 @@ const ProductDetails = () => {
 
         {/* Мазмуни Tab-ҳо */}
         {activeTab === "description" ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <Box
+            component={motion.div}
+            key="description"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+          >
             <Typography sx={{ fontSize: "14px", color: "#727272", lineHeight: 1.8 }}>
               {product.description}
             </Typography>
@@ -283,7 +304,13 @@ const ProductDetails = () => {
             </Box>
           </Box>
         ) : (
-          <Box>
+          <Box
+            component={motion.div}
+            key="reviews"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
             <Typography sx={{ fontSize: "15px", color: "#727272" }}>
               Customer reviews and ratings for this product will appear here. ({product.reviews} reviews available)
             </Typography>

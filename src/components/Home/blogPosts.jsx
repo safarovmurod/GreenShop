@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Pagination, IconButton } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SearchIcon from "@mui/icons-material/Search";
+import { motion } from "motion/react";
 import { useNavigate } from "react-router";
 
 // Суратҳоро метавонед ба суратҳои дилхоҳи худ иваз кунед
@@ -59,7 +60,7 @@ const BlogSection = () => {
     <Box sx={{ maxWidth: "1200px", mx: "auto", my: 10, px: { xs: "20px", md: "0" } }}>
       
       {/* Сарлавҳаи секция */}
-      <Box sx={{ textAlign: "center", mb: 6 }}>
+      <Box data-aos="fade-up" sx={{ textAlign: "center", mb: 6 }}>
         <Typography sx={{ fontWeight: "bold", fontSize: { xs: "24px", md: "28px" }, color: "#3D3D3D", mb: 1 }}>
           Our Blog Posts
         </Typography>
@@ -76,9 +77,13 @@ const BlogSection = () => {
           gap: "30px" 
         }}
       >
-        {currentPosts.map((post) => (
+        {currentPosts.map((post, index) => (
           <Box 
-            key={post.id} 
+            component={motion.div}
+            key={`${page}-${post.id}`}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.12, ease: "easeOut" }}
             onClick={() => navigate(`/blogs/${post.id}`)}
             sx={{ 
               cursor: "pointer",
@@ -100,6 +105,9 @@ const BlogSection = () => {
                 sx={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }} 
               />
               <IconButton
+                component={motion.button}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
                 className="blog-search"
                 aria-label="View blog post"
                 onClick={(event) => {
@@ -161,7 +169,7 @@ const BlogSection = () => {
       </Box>
 
       {/* Пагинацияи блог */}
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+      <Box data-aos="fade-up" sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
         <Pagination
           count={Math.ceil(blogPosts.length / postsPerPage)}
           page={page}

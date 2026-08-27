@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router";
+import { motion } from "motion/react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -43,7 +44,7 @@ const AccountLayout = () => {
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px" }}>
         
         {/* Sidebar */}
-        <Box sx={{ width: "250px", flexShrink: 0, backgroundColor: "#FBFBFB", p: 3, height: "fit-content" }}>
+        <Box data-aos="fade-right" sx={{ width: "250px", flexShrink: 0, backgroundColor: "#FBFBFB", p: 3, height: "fit-content" }}>
           <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "#3D3D3D", mb: 3 }}>
             My Account
           </Typography>
@@ -114,7 +115,14 @@ const AccountLayout = () => {
         </Box>
 
         {/* Dynamic Content Area (Вобаста ба Tab намоиш дода мешавад) */}
-        <Box sx={{ flex: 1 }}>
+        <Box
+          component={motion.div}
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          sx={{ flex: 1 }}
+        >
           
           {/* 1. ACCOUNT DETAILS */}
           {activeTab === "details" && (
@@ -133,7 +141,7 @@ const AccountLayout = () => {
                   </Box>
                 </Box>
               </Box>
-              <Button variant="contained" onClick={handleSave} sx={{ backgroundColor: "#46A358", color: "#fff", px: 4, py: 1.2, fontWeight: "bold", textTransform: "none", borderRadius: "4px", "&:hover": { backgroundColor: "#3a8a49" } }}>Save Change</Button>
+              <Button variant="contained" component={motion.button} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={handleSave} sx={{ backgroundColor: "#46A358", color: "#fff", px: 4, py: 1.2, fontWeight: "bold", textTransform: "none", borderRadius: "4px", "&:hover": { backgroundColor: "#3a8a49" } }}>Save Change</Button>
             </Box>
           )}
 
