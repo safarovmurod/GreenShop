@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "homeLabel": "Okey Post — go to home"
+  },
+  "navigation": {
+    "label": "Main navigation",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "search": {
+    "open": "Open search"
+  },
+  "subscribe": "Subscribe",
+  "language": {
+    "label": "Choose language"
+  },
+  "actions": {
+    "signUp": "Sign Up",
+    "login": "Login",
+    "contactUs": "Open an account"
+  },
+  "home": {
+    "eyebrow": "Banking, made human",
+    "title": "A clearer way to build your future.",
+    "description": "Simple tools, thoughtful guidance, and a bank that keeps your goals in focus.",
+    "cardLabel": "YourBank · Premium account",
+    "balance": "Available balance",
+    "growth": "+12.8% this month",
+    "secured": "Protected and monitored 24/7"
+  },
+  "footer": {
+    "tagline": "Financial confidence for every next step.",
+    "rights": "YourBank. All rights reserved",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu"
+  }
+}
