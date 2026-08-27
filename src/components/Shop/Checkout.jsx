@@ -12,6 +12,11 @@ import {
 } from "@mui/material";
 import { useNavigate, useOutletContext } from "react-router";
 import { motion } from "motion/react";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import { IconButton } from "@mui/material";
 import OrderModal from "./OrderModal";
 
 // Кортҳои пардохт
@@ -46,7 +51,22 @@ const Checkout = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: "1200px", mx: "auto", my: 6, px: { xs: "20px", md: "0" } }}>
+    <Box sx={{ maxWidth: "1200px", mx: "auto", my: { xs: 2, md: 6 }, px: { xs: "16px", md: "0" }, pb: { xs: "90px", md: 0 } }}>
+
+      {/* Сарлавҳаи мобилӣ (мувофиқи Figma) */}
+      <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center", mb: 2 }}>
+        <IconButton
+          onClick={() => navigate(-1)}
+          aria-label="Back"
+          sx={{ width: 38, height: 38, color: "#3D3D3D", backgroundColor: "#F5F6F5" }}
+        >
+          <ArrowBackIosNewIcon sx={{ fontSize: "16px" }} />
+        </IconButton>
+        <Typography sx={{ flex: 1, textAlign: "center", mr: "38px", fontSize: "20px", fontWeight: "bold", color: "#3D3D3D" }}>
+          Checkout
+        </Typography>
+      </Box>
+
       
       {/* Навигарияи боло (Breadcrumbs) */}
       <Typography sx={{ display: { xs: "none", md: "block" }, fontSize: "14px", color: "#727272", mb: 5 }}>
@@ -59,7 +79,7 @@ const Checkout = () => {
         / Shop / Checkout
       </Typography>
 
-      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "50px" }}>
+      <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", md: "row" }, gap: { xs: "28px", md: "50px" } }}>
         
         {/* Қисми чап: Billing Address */}
         <Box data-aos="fade-right" sx={{ flex: 1.3 }}>
@@ -206,9 +226,10 @@ const Checkout = () => {
 
           <FormControl component="fieldset" sx={{ width: "100%", mb: 4 }}>
             <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "card" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1, mb: 1.5 }}>
-                <FormControlLabel value="card" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="" sx={{ mr: 0 }} />
-                <Box sx={{ display: "flex", gap: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "card" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: { xs: "14px", md: "4px" }, px: 2, py: { xs: 1.5, md: 1 }, mb: 1.5, boxShadow: { xs: "0 2px 10px rgba(34, 74, 42, .05)", md: "none" } }}>
+                <CreditCardIcon sx={{ display: { xs: "block", md: "none" }, mr: 1.5, color: "#46A358" }} />
+                <FormControlLabel value="card" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="" sx={{ mr: 0, order: { xs: 2, md: 0 }, ml: { xs: "auto", md: 0 } }} />
+                <Box sx={{ display: "flex", gap: { xs: 0.6, md: 1 }, flexWrap: "nowrap" }}>
                   {cards.map((item) => (
                     <Typography
                       component={motion.div}
@@ -220,9 +241,10 @@ const Checkout = () => {
                         setCard(item);
                       }}
                       sx={{
-                        px: 1,
+                        px: { xs: 0.8, md: 1 },
                         py: 0.3,
-                        fontSize: "13px",
+                        whiteSpace: "nowrap",
+                        fontSize: { xs: "11px", md: "13px" },
                         cursor: "pointer",
                         borderRadius: "4px",
                         border: paymentMethod === "card" && card === item ? "1px solid #46A358" : "1px solid #eaeaea",
@@ -235,10 +257,12 @@ const Checkout = () => {
                   ))}
                 </Box>
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "bank" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1, mb: 1.5 }}>
+              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "bank" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: { xs: "14px", md: "4px" }, px: 2, py: { xs: 1.5, md: 1 }, mb: 1.5, boxShadow: { xs: "0 2px 10px rgba(34, 74, 42, .05)", md: "none" } }}>
+                <AccountBalanceIcon sx={{ display: { xs: "block", md: "none" }, mr: 1.5, color: "#46A358" }} />
                 <FormControlLabel value="bank" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="Direct bank transfer" />
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "cash" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: "4px", px: 2, py: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", border: paymentMethod === "cash" ? "1px solid #46A358" : "1px solid #eaeaea", borderRadius: { xs: "14px", md: "4px" }, px: 2, py: { xs: 1.5, md: 1 }, boxShadow: { xs: "0 2px 10px rgba(34, 74, 42, .05)", md: "none" } }}>
+                <LocalShippingOutlinedIcon sx={{ display: { xs: "block", md: "none" }, mr: 1.5, color: "#46A358" }} />
                 <FormControlLabel value="cash" control={<Radio sx={{ color: "#46A358", "&.Mui-checked": { color: "#46A358" } }} />} label="Cash on delivery" />
               </Box>
             </RadioGroup>
@@ -257,7 +281,7 @@ const Checkout = () => {
               py: 1.5, 
               fontWeight: "bold", 
               textTransform: "none", 
-              borderRadius: "4px",
+              borderRadius: { xs: "30px", md: "4px" },
               "&:hover": { backgroundColor: "#3a8a49" } 
             }}
           >

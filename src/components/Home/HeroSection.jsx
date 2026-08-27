@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { animate, stagger, splitText } from "animejs";
 import { motion } from "motion/react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import bannerImg1 from "../../assets/01 1.png";
 import bannerImg2 from "../../assets/pngwing.com (5).png";
 import bannerImg3 from "../../assets/pngwing.com (8).png";
@@ -52,19 +53,25 @@ const HeroSection = () => {
     <Box
       sx={{
         maxWidth: "1200px",
-        mx: "auto",
-        width: "100%",
-        backgroundColor: "#FBFBFB",
+        mx: { xs: "20px", md: "auto" },
+        width: { xs: "auto", md: "100%" },
+        backgroundColor: { xs: "transparent", md: "#FBFBFB" },
+        background: {
+          xs: "linear-gradient(135deg, #DFF1E1 0%, #EAF6EC 60%, #F3FAF4 100%)",
+          md: "#FBFBFB",
+        },
+        borderRadius: { xs: "24px", md: 0 },
+        overflow: { xs: "hidden", md: "visible" },
         display: "flex",
-        flexDirection: { xs: "column", md: "row" },
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: { xs: "20px", md: "40px 80px" },
+        padding: { xs: "20px 0 26px 20px", md: "40px 80px" },
         position: "relative",
-        minHeight: "450px",
+        minHeight: { xs: "230px", md: "450px" },
       }}
     >
-      <Box sx={{ flex: 1, pr: { md: 4 } }}>
+      <Box sx={{ flex: 1, pr: { md: 4 }, zIndex: 1 }}>
         <Typography
           ref={welcomeRef}
           sx={{
@@ -72,7 +79,8 @@ const HeroSection = () => {
             fontWeight: 500,
             fontSize: "14px",
             letterSpacing: "1px",
-            mb: 1,
+            mb: { xs: 0.5, md: 1 },
+            fontSize: { xs: "11px", md: "14px" },
             textTransform: "uppercase",
           }}
         >
@@ -85,7 +93,7 @@ const HeroSection = () => {
           sx={{
             color: "#3D3D3D",
             fontWeight: 900,
-            fontSize: { xs: "36px", md: "55px" },
+            fontSize: { xs: "24px", md: "55px" },
             lineHeight: 1.1,
             textTransform: "uppercase",
             mb: 2,
@@ -100,10 +108,10 @@ const HeroSection = () => {
           data-aos-delay="500"
           sx={{
             color: "#727272",
-            fontSize: "14px",
+            fontSize: { xs: "12px", md: "14px" },
             lineHeight: 1.6,
-            mb: 4,
-            maxWidth: "500px",
+            mb: { xs: 2, md: 4 },
+            maxWidth: { xs: "190px", md: "500px" },
           }}
         >
           We are an online plant shop offering a wide range of cheap and trendy
@@ -117,15 +125,18 @@ const HeroSection = () => {
           whileTap={{ scale: 0.95 }}
           data-aos="fade-up"
           data-aos-delay="650"
+          endIcon={<ArrowForwardIcon sx={{ display: { xs: "inline-flex", md: "none" }, fontSize: "16px" }} />}
           sx={{
-            backgroundColor: "#46A358",
-            color: "#fff",
-            padding: "10px 24px",
+            backgroundColor: { xs: "transparent", md: "#46A358" },
+            color: { xs: "#46A358", md: "#fff" },
+            padding: { xs: 0, md: "10px 24px" },
+            minWidth: { xs: "auto", md: 64 },
             fontWeight: "bold",
+            fontSize: { xs: "13px", md: "14px" },
             borderRadius: "6px",
             textTransform: "none",
             "&:hover": {
-              backgroundColor: "#3a8a49",
+              backgroundColor: { xs: "transparent", md: "#3a8a49" },
             },
           }}
         >
@@ -155,7 +166,7 @@ const HeroSection = () => {
           }}
           sx={{
             maxWidth: "100%",
-            maxHeight: "400px",
+            maxHeight: { xs: "190px", md: "400px" },
             objectFit: "contain",
           }}
         />
@@ -164,7 +175,7 @@ const HeroSection = () => {
       <Box
         sx={{
           position: "absolute",
-          bottom: "15px",
+          bottom: { xs: "12px", md: "15px" },
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",

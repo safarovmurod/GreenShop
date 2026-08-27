@@ -1,6 +1,5 @@
 import {
   LoginOutlined,
-  MenuOutlined,
   PersonOutlineOutlined,
   Search,
   ShoppingCartOutlined,
@@ -135,12 +134,7 @@ export default function Header({ user, cartCount = 0, onLoginClick }) {
               <ShoppingCartOutlined sx={{ fontSize: 21 }} />
             </Badge>
           </IconButton>
-          <IconButton
-            aria-label="Filters"
-            sx={{ display: { xs: "flex", md: "none" }, color: "#46a358", p: 0.8 }}
-          >
-            <MenuOutlined sx={{ fontSize: 21 }} />
-          </IconButton>
+
           {user ? (
             <Button
               component={motion(NavLink)}

@@ -5,6 +5,7 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { motion } from "motion/react";
+import logo from "../../assets/Logo (1).png";
 
 const LoginModal = ({ open = false, onClose, onAuth }) => {
   const [isLogin, setIsLogin] = useState(false); // Агар false бошад, саҳифаи Register кушода мешавад
@@ -47,12 +48,13 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
         left: 0, 
         width: "100%", 
         height: "100%", 
-        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+        backgroundColor: { xs: "#fff", md: "rgba(0, 0, 0, 0.5)" }, 
         display: "flex", 
         alignItems: "center", 
         justifyContent: "center", 
         zIndex: 1000,
-        px: 2
+        overflowY: "auto",
+        px: { xs: 0, md: 2 }
       }}
     >
       <Box 
@@ -63,12 +65,13 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
         sx={{ 
           backgroundColor: "#fff", 
           width: "100%", 
-          maxWidth: "480px", 
-          borderRadius: "4px", 
-          boxShadow: "0px 4px 20px rgba(0,0,0,0.15)", 
+          maxWidth: { xs: "100%", md: "480px" }, 
+          minHeight: { xs: "100vh", md: "auto" },
+          borderRadius: { xs: 0, md: "4px" }, 
+          boxShadow: { xs: "none", md: "0px 4px 20px rgba(0,0,0,0.15)" }, 
           position: "relative",
           p: { xs: 3, md: 5 },
-          borderTop: "4px solid #46A358"
+          borderTop: { xs: "none", md: "4px solid #46A358" }
         }}
       >
         
@@ -79,6 +82,11 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
         >
           <CloseIcon />
         </IconButton>
+
+        {/* Логотип дар мобилӣ (мувофиқи Figma) */}
+        <Box sx={{ display: { xs: "flex", md: "none" }, justifyContent: "center", mt: 5, mb: 4 }}>
+          <Box component="img" src={logo} alt="GreenShop" sx={{ width: "180px", height: "auto" }} />
+        </Box>
 
         {/* Сарлавҳаҳо: Login | Register */}
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, mb: 4 }}>
@@ -156,10 +164,10 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
               sx={{ 
                 backgroundColor: "#46A358", 
                 color: "#fff", 
-                py: 1.2, 
+                py: { xs: 1.5, md: 1.2 }, 
                 fontWeight: "bold", 
                 textTransform: "none", 
-                borderRadius: "4px",
+                borderRadius: { xs: "30px", md: "4px" },
                 mb: 4,
                 "&:hover": { backgroundColor: "#3a8a49" } 
               }}
@@ -229,10 +237,10 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
               sx={{ 
                 backgroundColor: "#46A358", 
                 color: "#fff", 
-                py: 1.2, 
+                py: { xs: 1.5, md: 1.2 }, 
                 fontWeight: "bold", 
                 textTransform: "none", 
-                borderRadius: "4px",
+                borderRadius: { xs: "30px", md: "4px" },
                 mb: 4,
                 "&:hover": { backgroundColor: "#3a8a49" } 
               }}
@@ -259,16 +267,17 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
         <Button 
           fullWidth 
           variant="outlined" 
-          startIcon={<GoogleIcon sx={{ color: "#EA4335" }} />}
+          startIcon={<GoogleIcon sx={{ color: { xs: "#fff", md: "#EA4335" } }} />}
           sx={{ 
-            borderColor: "#eaeaea", 
-            color: "#3D3D3D", 
-            py: 1, 
+            borderColor: { xs: "#4285F4", md: "#eaeaea" }, 
+            color: { xs: "#fff", md: "#3D3D3D" }, 
+            backgroundColor: { xs: "#4285F4", md: "transparent" },
+            py: { xs: 1.4, md: 1 }, 
             textTransform: "none", 
-            borderRadius: "4px", 
+            borderRadius: { xs: "30px", md: "4px" }, 
             mb: 2,
-            fontWeight: "normal",
-            "&:hover": { borderColor: "#46A358", backgroundColor: "rgba(70,163,88,0.02)" } 
+            fontWeight: { xs: "bold", md: "normal" },
+            "&:hover": { borderColor: { xs: "#3b78e7", md: "#46A358" }, backgroundColor: { xs: "#3b78e7", md: "rgba(70,163,88,0.02)" } } 
           }}
         >
           {isLogin ? "Login with Google" : "Continue with Google"}
@@ -277,19 +286,35 @@ const LoginModal = ({ open = false, onClose, onAuth }) => {
         <Button 
           fullWidth 
           variant="outlined" 
-          startIcon={<FacebookIcon sx={{ color: "#1877F2" }} />}
+          startIcon={<FacebookIcon sx={{ color: { xs: "#fff", md: "#1877F2" } }} />}
           sx={{ 
-            borderColor: "#eaeaea", 
-            color: "#3D3D3D", 
-            py: 1, 
+            borderColor: { xs: "#3B5998", md: "#eaeaea" }, 
+            color: { xs: "#fff", md: "#3D3D3D" }, 
+            backgroundColor: { xs: "#3B5998", md: "transparent" },
+            py: { xs: 1.4, md: 1 }, 
             textTransform: "none", 
-            borderRadius: "4px",
-            fontWeight: "normal",
-            "&:hover": { borderColor: "#46A358", backgroundColor: "rgba(70,163,88,0.02)" } 
+            borderRadius: { xs: "30px", md: "4px" },
+            fontWeight: { xs: "bold", md: "normal" },
+            mb: { xs: 3, md: 0 },
+            "&:hover": { borderColor: { xs: "#2d4373", md: "#46A358" }, backgroundColor: { xs: "#2d4373", md: "rgba(70,163,88,0.02)" } } 
           }}
         >
           {isLogin ? "Login with Facebook" : "Continue with Facebook"}
         </Button>
+
+        {/* Сатри поёнӣ дар мобилӣ (мувофиқи Figma) */}
+        <Typography
+          sx={{ display: { xs: "block", md: "none" }, textAlign: "center", fontSize: "14px", color: "#3D3D3D" }}
+        >
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
+          <Box
+            component="span"
+            onClick={() => setIsLogin(!isLogin)}
+            sx={{ color: "#46A358", fontWeight: "bold", cursor: "pointer" }}
+          >
+            {isLogin ? "Sign Up" : "Login"}
+          </Box>
+        </Typography>
 
       </Box>
     </Box>

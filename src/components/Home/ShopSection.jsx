@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography, Button, Slider, Pagination, Select, MenuItem, IconButton } from "@mui/material";
+import { Box, Typography, Button, Slider, Pagination, Select, MenuItem, IconButton, Drawer } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -29,7 +29,7 @@ const sizesList = [
   { name: "Large", count: 78 },
 ];
 
-const ShopSection = () => {
+const ShopSection = ({ search = "", filtersOpen = false, onCloseFilters }) => {
   const navigate = useNavigate();
   const { addToCart, wishlist, toggleWishlist } = useOutletContext();
 
@@ -46,6 +46,7 @@ const ShopSection = () => {
 
   // 1) Филтр кардан: category + price + size + All/New/Sale
   let result = plants.filter((plant) => {
+    if (search && !plant.name.toLowerCase().includes(search.toLowerCase())) return false;
     if (category && plant.categories !== category) return false;
     if (size && plant.size !== size) return false;
     if (plant.price < price[0] || plant.price > price[1]) return false;
@@ -67,18 +68,15 @@ const ShopSection = () => {
   // Ҳангоми иваз шудани филтр ба саҳифаи 1 бармегардем
   useEffect(() => {
     setPage(1);
-  }, [category, size, tab, sort, price]);
+  }, [category, size, tab, sort, price, search]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
-  return (
-    <Box sx={{ maxWidth: "1200px", mx: "auto", width: "100%", px: { xs: "20px", md: "0" }, mt: 5, mb: 10 }}>
-      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "40px" }}>
-
-        {/* Қисми чап: Филтрҳо ва Баннер */}
-        <Box data-aos="fade-right" sx={{ display: { xs: "none", md: "block" }, width: { xs: "100%", md: "250px" }, flexShrink: 0 }}>
+  // Филтрҳо: ҳам дар sidebar-и десктоп, ҳам дар Drawer-и мобилӣ истифода мешаванд
+  const filtersBlock = (
+    <>
           <Typography sx={{ fontWeight: "bold", fontSize: "18px", mb: 2, color: "#3D3D3D" }}>
             Categories
           </Typography>
@@ -144,16 +142,32 @@ const ShopSection = () => {
             ))}
           </Box>
 
+    </>
+  );
+
+  return (
+    <Box sx={{ maxWidth: "1200px", mx: "auto", width: "100%", px: { xs: "20px", md: "0" }, mt: 5, mb: 10 }}>
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: "40px" }}>
+
+        {/* Қисми чап: Филтрҳо ва Баннер */}
+        <Box data-aos="fade-right" sx={{ display: { xs: "none", md: "block" }, width: { xs: "100%", md: "250px" }, flexShrink: 0 }}>
+          {filtersBlock}
+
           {/* Super Sale: ба ҷои сурат видео (play/pause бо ref) */}
           <Box data-aos="zoom-in" data-aos-delay="200">
             <SuperSaleVideo ref={videoRef} onClick={() => videoRef.current.toggle()} />
           </Box>
         </Box>
 
+        {/* Ҳамон филтрҳо дар мобилӣ (аз тугмаи филтр кушода мешавад) */}
+        <Drawer anchor="left" open={filtersOpen} onClose={onCloseFilters}>
+          <Box sx={{ width: "270px", p: 2.5 }}>{filtersBlock}</Box>
+        </Drawer>
+
         {/* Қисми рост: Маҳсулот ва Пагинация */}
         <Box sx={{ flex: 1 }}>
           <Box data-aos="fade-down" sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4, borderBottom: "1px solid #f0f0f0", pb: 1 }}>
-            <Box sx={{ display: "flex", gap: "30px" }}>
+            <Box sx={{ display: "flex", gap: { xs: "18px", md: "30px" }, "& p": { fontSize: { xs: "14px", md: "16px" } } }}>
               <Typography
                 onClick={() => setTab("all")}
                 sx={{ color: tab === "all" ? "#46A358" : "#3D3D3D", fontWeight: tab === "all" ? "bold" : "normal", borderBottom: tab === "all" ? "2px solid #46A358" : "none", pb: 1, cursor: "pointer" }}
@@ -175,7 +189,7 @@ const ShopSection = () => {
             </Box>
 
             {/* Short by: select (намуди зоҳирӣ мисли пештара) */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
               <Typography sx={{ fontSize: "15px", color: "#3D3D3D" }}>Short by:</Typography>
               <Select
                 value={sort}
@@ -198,7 +212,7 @@ const ShopSection = () => {
             </Box>
           </Box>
 
-          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }, gap: { xs: "18px", md: "30px" }, rowGap: { xs: "28px", md: "40px" } }}>
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }, gap: { xs: "14px", md: "30px" }, rowGap: { xs: "20px", md: "40px" }, alignItems: "start" }}>
             {currentPlants.map((plant, index) => (
               <Box
                 component={motion.div}
@@ -208,9 +222,13 @@ const ShopSection = () => {
                 transition={{ duration: 0.45, delay: index * 0.07, ease: "easeOut" }}
                 whileHover={{ y: -6 }}
                 onClick={() => navigate(`/shop/${plant.id}`)}
-                sx={{ cursor: "pointer", "&:hover .card-icons": { opacity: 1 } }}
+                sx={{
+                  cursor: "pointer",
+                  mt: { xs: index % 2 === 1 ? "34px" : 0, md: 0 },
+                  "&:hover .card-icons": { opacity: 1 },
+                }}
               >
-                <Box sx={{ backgroundColor: "#FBFBFB", height: { xs: "185px", md: "250px" }, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", borderRadius: { xs: 2, md: 0 }, overflow: "hidden" }}>
+                <Box sx={{ backgroundColor: "#F5F6F5", height: { xs: "175px", md: "250px" }, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", borderRadius: { xs: "18px", md: 0 }, overflow: "hidden" }}>
                   <Box component="img" src={plant.images[0]} alt={plant.name} sx={{ width: "80%", height: "80%", objectFit: "contain" }} />
 
                   {/* Нишони Sale мисли Figma */}
@@ -220,16 +238,44 @@ const ShopSection = () => {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.25 + index * 0.07, type: "spring", stiffness: 300 }}
-                      sx={{ position: "absolute", top: 0, left: 0, px: 1, py: 0.4, backgroundColor: "#46A358", color: "#fff", fontSize: "12px", fontWeight: "bold" }}
+                      sx={{ position: "absolute", top: 0, left: 0, px: 1, py: 0.4, borderBottomRightRadius: { xs: "10px", md: 0 }, backgroundColor: "#46A358", color: "#fff", fontSize: { xs: "11px", md: "12px" }, fontWeight: "bold" }}
                     >
                       {Math.round(((plant.oldPrice - plant.price) / plant.oldPrice) * 100)}% OFF
                     </Typography>
                   )}
 
+                  {/* Дил дар мобилӣ (мувофиқи Figma) */}
+                  <IconButton
+                    aria-label="Add to wishlist"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      toggleWishlist(plant.id);
+                    }}
+                    sx={{
+                      display: { xs: "flex", md: "none" },
+                      position: "absolute",
+                      top: "8px",
+                      right: "8px",
+                      width: 30,
+                      height: 30,
+                      color: "#46A358",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 2px 8px rgba(0,0,0,.08)",
+                      "&:hover": { backgroundColor: "#fff" },
+                    }}
+                  >
+                    {wishlist.includes(plant.id) ? (
+                      <FavoriteIcon sx={{ fontSize: "16px" }} />
+                    ) : (
+                      <FavoriteBorderIcon sx={{ fontSize: "16px" }} />
+                    )}
+                  </IconButton>
+
                   {/* 3 иконка ҳангоми hover */}
                   <Box
                     className="card-icons"
                     sx={{
+                      display: { xs: "none", md: "flex" },
                       position: "absolute",
                       bottom: "12px",
                       left: "50%",
