@@ -1,6 +1,7 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Pagination, IconButton } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router";
 
 // Суратҳоро метавонед ба суратҳои дилхоҳи худ иваз кунед
@@ -47,6 +48,13 @@ export const blogPosts = [
 const BlogSection = () => {
   const navigate = useNavigate();
 
+  const [page, setPage] = useState(1);
+  const postsPerPage = 4; // дар ҳар саҳифа 4 post
+
+  // Пагинация: танҳо post-ҳои саҳифаи ҷорӣ нишон дода мешаванд
+  const startIndex = (page - 1) * postsPerPage;
+  const currentPosts = blogPosts.slice(startIndex, startIndex + postsPerPage);
+
   return (
     <Box sx={{ maxWidth: "1200px", mx: "auto", my: 10, px: { xs: "20px", md: "0" } }}>
       
@@ -68,7 +76,7 @@ const BlogSection = () => {
           gap: "30px" 
         }}
       >
-        {blogPosts.map((post) => (
+        {currentPosts.map((post) => (
           <Box 
             key={post.id} 
             onClick={() => navigate(`/blogs/${post.id}`)}
@@ -79,16 +87,42 @@ const BlogSection = () => {
               flexDirection: "column", 
               overflow: "hidden",
               transition: "0.3s",
-              "&:hover": { transform: "translateY(-5px)" }
+              "&:hover": { transform: "translateY(-5px)" },
+              "&:hover .blog-search": { opacity: 1 }
             }}
           >
-            {/* Сурати блог */}
-            <Box 
-              component="img" 
-              src={post.image} 
-              alt={post.title} 
-              sx={{ width: "100%", height: "190px", objectFit: "cover" }} 
-            />
+            {/* Сурати блог + иконкаи Search ҳангоми hover */}
+            <Box sx={{ position: "relative", overflow: "hidden" }}>
+              <Box 
+                component="img" 
+                src={post.image} 
+                alt={post.title} 
+                sx={{ width: "100%", height: "190px", objectFit: "cover", display: "block" }} 
+              />
+              <IconButton
+                className="blog-search"
+                aria-label="View blog post"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  navigate(`/blogs/${post.id}`);
+                }}
+                sx={{
+                  position: "absolute",
+                  bottom: "12px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 30,
+                  height: 30,
+                  opacity: 0,
+                  transition: "opacity 0.3s ease",
+                  backgroundColor: "#fff",
+                  color: "#46A358",
+                  "&:hover": { backgroundColor: "#46A358", color: "#fff" },
+                }}
+              >
+                <SearchIcon sx={{ fontSize: "17px" }} />
+              </IconButton>
+            </Box>
 
             {/* Маълумот ва матнҳо */}
             <Box sx={{ p: 2.5, display: "flex", flexDirection: "column", flex: 1 }}>
@@ -124,6 +158,20 @@ const BlogSection = () => {
             </Box>
           </Box>
         ))}
+      </Box>
+
+      {/* Пагинацияи блог */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+        <Pagination
+          count={Math.ceil(blogPosts.length / postsPerPage)}
+          page={page}
+          onChange={(event, value) => setPage(value)}
+          shape="rounded"
+          sx={{
+            "& .MuiPaginationItem-root": { fontSize: "16px", borderRadius: "4px" },
+            "& .Mui-selected": { backgroundColor: "#46A358 !important", color: "#fff" }
+          }}
+        />
       </Box>
 
     </Box>
