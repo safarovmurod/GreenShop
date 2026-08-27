@@ -49,7 +49,7 @@ const BlogSection = () => {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
-  const postsPerPage = 4; // дар ҳар саҳифа 4 post
+  const postsPerPage = 2; // дар ҳар саҳифа 2 post
 
   // Пагинация: танҳо post-ҳои саҳифаи ҷорӣ нишон дода мешаванд
   const startIndex = (page - 1) * postsPerPage;
