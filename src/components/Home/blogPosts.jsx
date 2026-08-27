@@ -68,11 +68,11 @@ const BlogSection = () => {
         </Typography>
       </Box>
 
-      {/* Grid-и карточкаҳои блог (4 сутун) */}
+      {/* Grid-и карточкаҳои блог (2 сутун) */}
       <Box 
         sx={{ 
           display: "grid", 
-          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }, 
+          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(2, 1fr)" }, 
           gap: "30px" 
         }}
       >
