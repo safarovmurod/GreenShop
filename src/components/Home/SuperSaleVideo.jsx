@@ -1,9 +1,15 @@
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { Box } from "@mui/material";
 
-// Манбаи видео (агар видеои худро дошта бошед, танҳо ин сатрро иваз кунед)
+// Манбаи видео дар бораи растаниҳо (Wikimedia Commons, CC).
+// Агар видеои худро дошта бошед: онро ба public/videos/ монед ва
+// ин сатрро иваз кунед: const VIDEO_SRC = "/videos/super-sale.mp4";
 const VIDEO_SRC =
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4";
+  "https://upload.wikimedia.org/wikipedia/commons/0/0c/Time-lapse_of_a_flower_blooming.webm";
+
+// Манбаи захиравӣ (агар якумӣ кушода нашавад, браузер инро мегирад)
+const VIDEO_SRC_BACKUP =
+  "https://upload.wikimedia.org/wikipedia/commons/e/e3/Strawberry_growth_(Video).webm";
 
 // Видео бо ref идора мешавад: play / pause / toggle
 const SuperSaleVideo = forwardRef(function SuperSaleVideo(props, ref) {
@@ -25,7 +31,6 @@ const SuperSaleVideo = forwardRef(function SuperSaleVideo(props, ref) {
     <Box
       component="video"
       ref={videoRef}
-      src={VIDEO_SRC}
       autoPlay
       muted
       loop
@@ -40,7 +45,10 @@ const SuperSaleVideo = forwardRef(function SuperSaleVideo(props, ref) {
         cursor: "pointer",
         display: "block",
       }}
-    />
+    >
+      <source src={VIDEO_SRC} />
+      <source src={VIDEO_SRC_BACKUP} />
+    </Box>
   );
 });
 
