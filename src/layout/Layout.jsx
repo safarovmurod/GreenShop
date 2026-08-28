@@ -25,6 +25,7 @@ export default function Layout() {
   const [user, setUser] = useState(() => readStorage("user", null));
   const [loginOpen, setLoginOpen] = useState(false);
   const [notice, setNotice] = useState("");
+  const [search, setSearch] = useState(""); // ҷустуҷӯи умумӣ (Header + мобилӣ)
 
   // AOS: аниматсияи scroll барои ҳамаи секцияҳо
   useEffect(() => {
@@ -106,6 +107,8 @@ export default function Layout() {
       <Header
         user={user}
         cartCount={cartCount}
+        search={search}
+        onSearchChange={setSearch}
         onLoginClick={() => setLoginOpen(true)}
       />
       <Outlet
@@ -119,6 +122,8 @@ export default function Layout() {
           clearCart,
           wishlist,
           toggleWishlist,
+          search,
+          setSearch,
           user,
           login,
           logout,

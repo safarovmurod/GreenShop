@@ -4,8 +4,8 @@ import {
   Search,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { useEffect, useRef } from "react";
-import { Box, IconButton, Stack, Button, Badge } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Box, IconButton, Stack, Button, Badge, InputBase } from "@mui/material";
 import { NavLink, useNavigate } from "react-router";
 import { animate } from "animejs";
 import { motion } from "motion/react";
@@ -18,9 +18,10 @@ const links = [
   { label: "Blogs", path: "/blogs" },
 ];
 
-export default function Header({ user, cartCount = 0, onLoginClick }) {
+export default function Header({ user, cartCount = 0, search = "", onSearchChange, onLoginClick }) {
   const navigate = useNavigate();
   const cartRef = useRef(null);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   // anime.js: ҳангоми илова шудани маҳсулот иконкаи сават "мепарад"
   useEffect(() => {
@@ -51,13 +52,13 @@ export default function Header({ user, cartCount = 0, onLoginClick }) {
         <Box
           component={NavLink}
           to="/"
-          sx={{ display: "flex", alignItems: "center", flexShrink: 0 }}
+          sx={{ display: "flex", alignItems: "center", minWidth: 0, flexShrink: { xs: 1, md: 0 } }}
         >
           <Box
             component="img"
             src={logo}
             alt="GreenShop"
-            sx={{ display: "block", width: { xs: 106, md: 120 }, height: "auto" }}
+            sx={{ display: "block", width: { xs: 106, md: 120 }, maxWidth: "100%", height: "auto" }}
           />
         </Box>
 
@@ -107,9 +108,36 @@ export default function Header({ user, cartCount = 0, onLoginClick }) {
         </Stack>
 
         <Stack direction="row" sx={{ alignItems: "center" }} gap={{ xs: 0.25, sm: 1 }}>
+          {/* Майдони ҷустуҷӯ (бо зеркунии иконка кушода мешавад) */}
+          {searchOpen && (
+            <InputBase
+              autoFocus
+              value={search}
+              onChange={(event) => {
+                onSearchChange(event.target.value);
+                navigate("/");
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") setSearchOpen(false);
+              }}
+              placeholder="Find your plants"
+              sx={{
+                width: { xs: 92, sm: 150, md: 180 },
+                height: 34,
+                px: 1.5,
+                borderRadius: "17px",
+                backgroundColor: "#f5f6f5",
+                fontSize: 14,
+              }}
+            />
+          )}
           <IconButton
             aria-label="Search"
-            sx={{ color: "#3d3d3d", p: 0.8, "&:hover": { color: "#46a358" } }}
+            onClick={() => {
+              setSearchOpen(!searchOpen);
+              if (searchOpen) onSearchChange("");
+            }}
+            sx={{ color: searchOpen ? "#46a358" : "#3d3d3d", p: 0.8, "&:hover": { color: "#46a358" } }}
           >
             <Search sx={{ fontSize: 21 }} />
           </IconButton>

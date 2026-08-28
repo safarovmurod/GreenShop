@@ -1,6 +1,27 @@
-import { FavoriteBorder, HomeOutlined, PersonOutlineOutlined, ShoppingCartOutlined, ShoppingBagOutlined } from "@mui/icons-material";
+import { FavoriteBorder, HomeOutlined, PersonOutlineOutlined, ShoppingCartOutlined } from "@mui/icons-material";
 import { Box, IconButton, Badge } from "@mui/material";
 import { NavLink, useNavigate } from "react-router";
+
+// Иконкаи сканер (камера) мувофиқи Figma: кунҷҳо + хатти миёна
+function ScanIcon() {
+  return (
+    <Box
+      component="svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      sx={{ width: 24, height: 24 }}
+    >
+      <path d="M4 9V6.5A2.5 2.5 0 0 1 6.5 4H9" />
+      <path d="M15 4h2.5A2.5 2.5 0 0 1 20 6.5V9" />
+      <path d="M20 15v2.5a2.5 2.5 0 0 1-2.5 2.5H15" />
+      <path d="M9 20H6.5A2.5 2.5 0 0 1 4 17.5V15" />
+      <path d="M3 12h18" />
+    </Box>
+  );
+}
 
 export default function MobileBottomNav({ user, cartCount = 0, onLoginClick }) {
   const navigate = useNavigate();
@@ -79,7 +100,7 @@ export default function MobileBottomNav({ user, cartCount = 0, onLoginClick }) {
           "& svg": { fontSize: 24 },
         }}
       >
-        <ShoppingBagOutlined />
+        <ScanIcon />
       </IconButton>
 
       {items.slice(2).map((item) =>
