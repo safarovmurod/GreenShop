@@ -1,16 +1,21 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { useNavigate } from "react-router";
+import { motion } from "motion/react";
 import { plants } from "../../data/api";
 
-const RelatedProducts = () => {
-  // Барои мисол 5 та маҳсулоти аввалро ҳамчун Related Products мегирем
-  const relatedList = plants.slice(3, 8);
+const RelatedProducts = ({ currentId }) => {
+  const navigate = useNavigate();
+
+  // 5 маҳсулоти дигар (маҳсулоти ҷорӣ ба рӯйхат намеояд)
+  const relatedList = plants.filter((plant) => plant.id !== currentId).slice(3, 8);
 
   return (
     <Box sx={{ maxWidth: "1200px", mx: "auto", my: 10, px: { xs: "20px", md: "0" } }}>
       
       {/* Сарлавҳа */}
       <Typography 
+        data-aos="fade-right"
         sx={{ 
           fontSize: "18px", 
           fontWeight: "bold", 
@@ -32,8 +37,18 @@ const RelatedProducts = () => {
           mb: 4
         }}
       >
-        {relatedList.map((plant) => (
-          <Box key={plant.id} sx={{ cursor: "pointer" }}>
+        {relatedList.map((plant, index) => (
+          <Box
+            component={motion.div}
+            key={plant.id}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.45, delay: index * 0.08 }}
+            whileHover={{ y: -6 }}
+            onClick={() => navigate(`/shop/${plant.id}`)}
+            sx={{ cursor: "pointer" }}
+          >
             {/* Замина ва сурати маҳсулот */}
             <Box 
               sx={{ 

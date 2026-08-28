@@ -8,6 +8,8 @@ import PlantCare from "./pages/PlantCare";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import BlogPost from "./pages/BlogPost";
+import MyAccount from "./pages/MyAccount";
 
 const router = createBrowserRouter([
   {
@@ -17,11 +19,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "shop", element: <Shop /> },
+      { path: "shop/:id", element: <Shop /> },
       { path: "cart", element: <Cart /> },
       { path: "checkout", element: <Checkout /> },
       { path: "blogs", element: <Blogs /> },
+      { path: "blogs/:id", element: <BlogPost /> },
       { path: "plant-care", element: <PlantCare /> },
       { path: "login", element: <Login /> },
+      { path: "my-account", element: <MyAccount /> },
     ],
   },
 ]);

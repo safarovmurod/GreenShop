@@ -31,7 +31,7 @@ const Footer = () => {
         >
           
           {/* Блоки 1 */}
-          <Box sx={{ flex: 1, maxWidth: "240px" }}>
+          <Box data-aos="fade-up" sx={{ flex: 1, maxWidth: "240px" }}>
             <Box sx={{ color: "#46A358", mb: 2 }}>
               <LocalFloristIcon sx={{ fontSize: 40 }} />
             </Box>
@@ -44,7 +44,7 @@ const Footer = () => {
           </Box>
 
           {/* Блоки 2 */}
-          <Box sx={{ flex: 1, maxWidth: "240px" }}>
+          <Box data-aos="fade-up" data-aos-delay="120" sx={{ flex: 1, maxWidth: "240px" }}>
             <Box sx={{ color: "#46A358", mb: 2 }}>
               <GrassIcon sx={{ fontSize: 40 }} />
             </Box>
@@ -57,7 +57,7 @@ const Footer = () => {
           </Box>
 
           {/* Блоки 3 */}
-          <Box sx={{ flex: 1, maxWidth: "240px" }}>
+          <Box data-aos="fade-up" data-aos-delay="240" sx={{ flex: 1, maxWidth: "240px" }}>
             <Box sx={{ color: "#46A358", mb: 2 }}>
               <WaterDropIcon sx={{ fontSize: 40 }} />
             </Box>
@@ -144,7 +144,7 @@ const Footer = () => {
         <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, justifyContent: "space-between", gap: 4, mb: 6 }}>
           
           <Box>
-            <Typography sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>My Account</Typography>
+            <Typography data-aos="fade-up" data-aos-delay="100" sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>My Account</Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <Typography sx={{ fontSize: "14px", color: "#727272", cursor: "pointer", "&:hover": { color: "#46A358" } }}>My Account</Typography>
               <Typography sx={{ fontSize: "14px", color: "#727272", cursor: "pointer", "&:hover": { color: "#46A358" } }}>Our stores</Typography>
@@ -155,7 +155,7 @@ const Footer = () => {
           </Box>
 
           <Box>
-            <Typography sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>Help & Guide</Typography>
+            <Typography data-aos="fade-up" data-aos-delay="200" sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>Help & Guide</Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <Typography sx={{ fontSize: "14px", color: "#727272", cursor: "pointer", "&:hover": { color: "#46A358" } }}>Help Center</Typography>
               <Typography sx={{ fontSize: "14px", color: "#727272", cursor: "pointer", "&:hover": { color: "#46A358" } }}>How to Buy</Typography>
@@ -166,7 +166,7 @@ const Footer = () => {
           </Box>
 
           <Box>
-            <Typography sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>Categories</Typography>
+            <Typography data-aos="fade-up" data-aos-delay="300" sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>Categories</Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <Typography sx={{ fontSize: "14px", color: "#727272", cursor: "pointer", "&:hover": { color: "#46A358" } }}>House Plants</Typography>
               <Typography sx={{ fontSize: "14px", color: "#727272", cursor: "pointer", "&:hover": { color: "#46A358" } }}>Potter Plants</Typography>
@@ -177,7 +177,7 @@ const Footer = () => {
           </Box>
 
           <Box>
-            <Typography sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>Social Media</Typography>
+            <Typography data-aos="fade-up" data-aos-delay="400" sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>Social Media</Typography>
             <Box sx={{ display: "flex", gap: 1.5, mb: 3 }}>
               <Box sx={{ width: 30, height: 30, backgroundColor: "rgba(70, 163, 88, 0.1)", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", color: "#46A358", cursor: "pointer" }}>
                 <FacebookIcon sx={{ fontSize: 18 }} />
@@ -196,7 +196,7 @@ const Footer = () => {
               </Box>
             </Box>
 
-            <Typography sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>We accept</Typography>
+            <Typography data-aos="fade-up" data-aos-delay="500" sx={{ fontWeight: "bold", fontSize: "16px", color: "#3D3D3D", mb: 2 }}>We accept</Typography>
             <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
               {/* Нишонҳои кортҳо тавассути матни услубӣ ё бандҳо */}
               <Typography sx={{ fontWeight: "bold", fontSize: "14px", color: "#1A1F71", backgroundColor: "#fff", px: 1, py: 0.5, borderRadius: "4px", border: "1px solid #ddd" }}>PayPal</Typography>
@@ -208,7 +208,7 @@ const Footer = () => {
         </Box>
 
         {/* Қисми 4: Copyright */}
-        <Box sx={{ borderTop: "1px solid #eaeaea", pt: 3, textAlign: "center" }}>
+        <Box data-aos="fade-up" sx={{ borderTop: "1px solid #eaeaea", pt: 3, textAlign: "center" }}>
           <Typography sx={{ fontSize: "14px", color: "#3D3D3D" }}>
             © 2021 GreenShop. All Rights Reserved.
           </Typography>
